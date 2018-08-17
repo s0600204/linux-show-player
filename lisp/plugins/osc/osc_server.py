@@ -97,7 +97,7 @@ class OscServer:
             )
         except ServerError:
             logger.exception(
-                translate("OscServerError", "Cannot start OSC sever")
+                translate("OscServerError", "Cannot start OSC server")
             )
 
     def stop(self):

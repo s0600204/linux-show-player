@@ -127,7 +127,7 @@ class CueListView(QTreeWidget):
         self.setAlternatingRowColors(True)
         self.setVerticalScrollMode(self.ScrollPerItem)
 
-        # This allow to have some spared space at the end of the scroll-area
+        # This allows to have some spare space at the end of the scroll-area
         self.verticalScrollBar().rangeChanged.connect(self.__updateScrollRange)
         self.currentItemChanged.connect(
             self.__currentItemChanged, Qt.QueuedConnection

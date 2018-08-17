@@ -34,7 +34,7 @@ class CueCartModel(ModelAdapter):
         self.__columns = columns
 
     def flat(self, index):
-        """If index is multidimensional return a flatted version.
+        """If index is multidimensional return a flattened version.
 
         :rtype: int
         """

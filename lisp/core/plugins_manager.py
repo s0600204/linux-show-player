@@ -63,16 +63,15 @@ class PluginsManager:
             self.register_plugin(name, plugin)
 
         # Load (instantiate) the plugins
-        # Note that PluginsLoader.load() is a generator, it will yield
-        # each plugin when ready, so "self.plugins" will be update gradually.
+        # Note that PluginsLoader.load() is a generator: it will yield
+        # each plugin when ready, so "self.plugins" will be updated gradually.
         self._plugins.update(
             PluginsLoader(self.application, self._plugins.copy()).load()
         )
 
     def register_plugin(self, name, plugin):
         if name in self._plugins:
-            # Prevent user plugins to override those provided with lisp,
-            # if the latter are register before.
+            # Prevent user plugins from overriding those provided with lisp.
             # More generically, if two plugins with same name are provided,
             # only the first will be kept.
             logger.error(

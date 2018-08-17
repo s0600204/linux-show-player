@@ -72,9 +72,9 @@ class JackSinkSettings(SettingsPage):
         # if __jack_client is None this will return a default value
         self.connections = JackSink.default_connections(self.__jack_client)
 
-        self.retranlsateUi()
+        self.retranslateUi()
 
-    def retranlsateUi(self):
+    def retranslateUi(self):
         self.jackGroup.setTitle(translate("JackSinkSettings", "Connections"))
         self.connectionsEdit.setText(
             translate("JackSinkSettings", "Edit connections")

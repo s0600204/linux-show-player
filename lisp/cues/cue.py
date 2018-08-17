@@ -76,7 +76,7 @@ class Cue(HasProperties):
     """Cue(s) are the base component to implement any kind of live-controllable
     element (live = during a show).
 
-    A cue implement his behavior(s) reimplementing __start__, __stop__,
+    A cue should support this behavior by reimplementing __start__, __stop__,
     __pause__ and __interrupt__ methods.
 
     Cue provide **(and any subclass should do the same)** properties via
