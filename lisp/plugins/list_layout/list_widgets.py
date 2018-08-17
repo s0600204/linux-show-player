@@ -127,7 +127,7 @@ class CueStatusIcons(QWidget):
             path.lineTo(0, indicator_height - 1)
             path.lineTo(indicator_width // 3, indicator_height - 1)
             path.lineTo(indicator_width, indicator_width)
-            path.lineTo(indicator_width // 3, 0)
+            path.lineTo(indicator_width // 3, 1)
             path.lineTo(0, 1)
 
             qp.setPen(QPen(QBrush(QColor(0, 0, 0)), 2))
