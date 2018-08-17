@@ -38,6 +38,7 @@ class PagesTreeWidget(QWidget):
         self.navWidget.setHeaderHidden(True)
         self.navWidget.setModel(self.navModel)
         self.navWidget.setItemDelegate(PaddedDelegate(vPad=10))
+        self.navWidget.expandAll()
         self.layout().addWidget(self.navWidget, 0, 0)
 
         self._currentWidget = QWidget()
