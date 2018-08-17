@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2019 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ class PagesTreeWidget(QWidget):
         self.navWidget.setHeaderHidden(True)
         self.navWidget.setModel(self.navModel)
         self.navWidget.setItemDelegate(PaddedDelegate(vPad=10))
+        self.navWidget.expandAll()
         self.layout().addWidget(self.navWidget, 0, 0)
 
         self._currentWidget = QWidget()
