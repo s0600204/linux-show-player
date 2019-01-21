@@ -88,6 +88,7 @@ class CueStatusIcons(QWidget):
         self._item.cue.stopped.connect(self.updateIcon, Connection.QtQueued)
         self._item.cue.paused.connect(self.updateIcon, Connection.QtQueued)
         self._item.cue.error.connect(self.updateIcon, Connection.QtQueued)
+        self._item.cue.error_clear.connect(self.updateIcon, Connection.QtQueued)
         self._item.cue.end.connect(self.updateIcon, Connection.QtQueued)
 
         self.updateIcon()
@@ -237,6 +238,7 @@ class CueTimeWidget(TimeWidget):
         self.cue.stopped.connect(self._stop, Connection.QtQueued)
         self.cue.paused.connect(self._pause, Connection.QtQueued)
         self.cue.error.connect(self._error, Connection.QtQueued)
+        self.cue.error_clear.connect(self._stop, Connection.QtQueued)
         self.cue.end.connect(self._stop, Connection.QtQueued)
         self.cue.changed("duration").connect(
             self._updateDuration, Connection.QtQueued
