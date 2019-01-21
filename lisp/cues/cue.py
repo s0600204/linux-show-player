@@ -246,6 +246,10 @@ class Cue(HasProperties):
     def start(self, fade=False):
         """Start the cue."""
 
+        # If there's an Error, then we shouldn't wish to continue as that might make things worse.
+        if self._state & CueState.Error:
+            return
+
         # If possible acquire the state-lock, otherwise return
         if not self._st_lock.acquire(blocking=False):
             return
