@@ -560,3 +560,7 @@ class Cue(HasProperties):
             or next_action == CueNextAction.SelectAfterEnd
         ):
             self.end.connect(self.next.emit)
+
+    @property
+    def type(self):
+        return self._type_
