@@ -35,6 +35,7 @@ CueActionsStrings = {
     CueAction.Pause: QT_TRANSLATE_NOOP("CueAction", "Pause"),
     CueAction.Stop: QT_TRANSLATE_NOOP("CueAction", "Stop"),
     CueAction.DoNothing: QT_TRANSLATE_NOOP("CueAction", "Do Nothing"),
+    CueAction.LoopRelease: QT_TRANSLATE_NOOP("CueAction", "Release from Loop"),
 }
 
 

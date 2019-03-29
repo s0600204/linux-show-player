@@ -61,6 +61,7 @@ class CueAction(EqEnum):
     Pause = "Pause"
     Stop = "Stop"
     DoNothing = "DoNothing"
+    LoopRelease = "LoopRelease"
 
 
 class CueNextAction(EqEnum):
@@ -233,6 +234,8 @@ class Cue(HasProperties):
                         self._default_fade_duration(),
                         self._default_fade_type(FadeInType, FadeInType.Linear),
                     )
+            elif action == CueAction.LoopRelease:
+                self.loop_release()
 
     def _default_fade_duration(self):
         return AppConfig().get("cue.fadeAction", 0)

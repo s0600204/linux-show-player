@@ -48,6 +48,7 @@ class MediaCue(Cue):
         CueAction.FadeIn,
         CueAction.Interrupt,
         CueAction.FadeOutInterrupt,
+        CueAction.LoopRelease,
     )
 
     def __init__(self, media, id=None):
@@ -226,3 +227,6 @@ class MediaCue(Cue):
                 self.__volume.volume,
                 FadeInType[self.fadein_type],
             )
+
+    def loop_release(self):
+        self.media.loop_release()

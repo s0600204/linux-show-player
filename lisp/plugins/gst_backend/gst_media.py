@@ -293,3 +293,6 @@ class GstMedia(Media):
 
     def __duration_changed(self, duration):
         self.duration = duration
+
+    def loop_release(self):
+        self.__loop = 0
