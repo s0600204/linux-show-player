@@ -101,6 +101,10 @@ class HasProperties(metaclass=HasPropertiesMeta):
         self.property_changed = Signal()
         # Emitted after property change (self, name, value)
 
+        self.properties_changed = Signal()
+        # Emitted when properties have changed. Useful for those cases where
+        # it isn't necessary to know what's changed, only that something has.
+
     def properties_names(self, filter=None):
         """
         To work as intended `filter` must be a function that take a set as
@@ -204,6 +208,7 @@ class HasProperties(metaclass=HasPropertiesMeta):
                     current.update_properties(value)
                 else:
                     setattr(self, name, value)
+        self.properties_changed.emit(self)
 
     def changed(self, name):
         """
