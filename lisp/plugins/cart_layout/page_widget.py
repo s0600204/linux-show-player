@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2016 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -144,3 +144,11 @@ class CartPageWidget(QWidget):
 
         if not 0 <= row < self.__rows or not 0 <= column < self.__columns:
             raise IndexError(f"index out of bound {row, column}")
+
+    @property
+    def columns(self):
+        return self.__columns
+
+    @property
+    def rows(self):
+        return self.__rows
