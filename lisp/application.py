@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2020 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,8 +32,10 @@ from lisp.cues.cue import Cue
 from lisp.cues.cue_factory import CueFactory
 from lisp.cues.cue_model import CueModel
 from lisp.cues.media_cue import MediaCue
+from lisp.plugins import get_plugin, get_plugins, showfile_plugins_check
 from lisp.ui.layoutselect import LayoutSelect
 from lisp.ui.mainwindow import MainWindow
+from lisp.ui.pluginunavailabilitydialog import PluginUnavailabilityDialog, PluginUnavailabilityDialogAction
 from lisp.ui.settings.app_configuration import AppConfigurationDialog
 from lisp.ui.settings.app_pages.cue import CueAppSettings
 from lisp.ui.settings.app_pages.general import AppGeneral
@@ -133,6 +135,25 @@ class Application(metaclass=Singleton):
         self.__cue_model = None
         self.__main_window = None
 
+    def __show_plugin_unavailability(self, plugins_dict):
+
+        dialog = PluginUnavailabilityDialog(plugins_dict, parent=self.window)
+
+        # There are (currently) three responses:
+        # 1. Create new session
+        # 2. Open a different session
+        # 3. Cancel current open
+        result = dialog.exec()
+        if result == QDialog.Rejected:
+            if self.__session is None:
+                qApp.quit()
+        elif result == PluginUnavailabilityDialogAction.NewShowfile.value:
+            self.__new_session_dialog()
+        elif result == PluginUnavailabilityDialogAction.OpenDifferent.value:
+            path = self.window.getOpenSessionFile()
+            if path is not None:
+                self.__load_from_file(path)
+
     def __new_session_dialog(self):
         """Show the layout-selection dialog"""
         try:
@@ -176,14 +197,46 @@ class Application(metaclass=Singleton):
         session_props = self.session.properties()
         session_props.pop("session_file", None)
 
-        # Get session cues
+        # Determine plugins used in showfile
+        plugins_list = [
+            self.session.layout.__module__.split(".")[2]
+        ]
+
+        # Plugins that register cue-settings generic to all cue-types.
+        #
+        # (Cue-settings specific to certain cue-types are expected to be
+        #   included within the same plugin as that cue-type.)
+        #
+        # (It would be nice to only include these if the settings were
+        #   actually in use (e.g. not left at defaults).)
+        for registered in CueSettingsRegistry().filter():
+            module = registered.__module__.split('.')
+            if module[1] != 'plugins':
+                continue
+            plugins_list.append(module[2])
+
+        # Get session cues (and the plugins used to create them)
         session_cues = []
         for cue in self.layout.cues():
             session_cues.append(
                 cue.properties(defaults=False, filter=filter_live_properties)
             )
+            plugin = cue.__module__.split('.')[2]
+            if plugin not in plugins_list:
+                plugins_list.append(plugin)
 
-        session_dict = {"session": session_props, "cues": session_cues}
+        # Save basic plugin info
+        plugins_dict = {}
+        installed = {v.__module__.split('.')[2]: k for k, v in get_plugins()}
+        for plugin_name in plugins_list:
+            plugin_name = installed[plugin_name]
+            plugin = get_plugin(plugin_name)
+            plugins_dict[plugin_name] = {
+                'name': plugin.Name,
+                'vers': plugin.Config.get('_version_'),
+            }
+
+        session_dict = {"session": session_props, "cues": session_cues, "plugins": plugins_dict}
 
         # Write to a file the json-encoded session
         with open(session_file, mode="w", encoding="utf-8") as file:
@@ -207,6 +260,13 @@ class Application(metaclass=Singleton):
         try:
             with open(session_file, mode="r", encoding="utf-8") as file:
                 session_dict = json.load(file)
+
+            # Check necessary plugins are installed and loaded/enabled
+            if 'plugins' in session_dict:
+                check_passed = showfile_plugins_check(session_dict['plugins'])
+                if not check_passed:
+                    self.__show_plugin_unavailability(session_dict['plugins'])
+                    return
 
             # New session
             self.__new_session(

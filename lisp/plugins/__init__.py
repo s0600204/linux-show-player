@@ -17,6 +17,7 @@
 
 from typing import Optional
 
+from lisp.core.plugin import PluginState
 from lisp.core.plugins_manager import PluginsManager
 
 DefaultPluginsManager: Optional[PluginsManager] = None
@@ -28,6 +29,19 @@ def load_plugins(application, enable_user_plugins=True):
         DefaultPluginsManager = PluginsManager(application, enable_user_plugins)
 
     DefaultPluginsManager.load_plugins()
+
+
+def showfile_plugins_check(showfile_plugins):
+    '''Check that all plugins that a showfile claims to need are available and loaded'''
+    for identifier in showfile_plugins:
+        if not DefaultPluginsManager.plugin_exists(identifier):
+            return False
+
+        plugin = DefaultPluginsManager.get_plugin(identifier)
+        if not plugin.is_loaded() or plugin.State & PluginState.Error:
+            return False
+
+    return True
 
 
 def finalize_plugins():
