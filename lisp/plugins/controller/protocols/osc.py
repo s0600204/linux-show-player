@@ -303,6 +303,8 @@ class OscSettings(SettingsPage):
             message = Osc.key_from_values(row[0], row[1], row[2])
             entries.append((message, row[3]))
 
+        if not entries:
+            return {}
         return {"osc": entries}
 
     def loadSettings(self, settings):
