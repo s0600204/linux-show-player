@@ -207,23 +207,25 @@ class Application(metaclass=Singleton):
         # (Cue-settings specific to certain cue-types are expected to be
         #   included within the same plugin as that cue-type.)
         #
-        # (It would be nice to only include these if the settings were
-        #   actually in use (e.g. not left at defaults).)
+        # We assume that a module called (e.g.) 'alpha' stores its settings
+        #   under a cue property by the same name.
+        plugins_cue_settings_list = []
         for registered in CueSettingsRegistry().filter():
             module = registered.__module__.split('.')
-            if module[1] != 'plugins':
-                continue
-            plugins_list.append(module[2])
+            if module[1] == 'plugins':
+                plugins_cue_settings_list.append(module[2])
 
         # Get session cues (and the plugins used to create them)
         session_cues = []
         for cue in self.layout.cues():
-            session_cues.append(
-                cue.properties(defaults=False, filter=filter_live_properties)
-            )
+            cue_properties = cue.properties(defaults=False, filter=filter_live_properties)
+            session_cues.append(cue_properties)
+
             plugin = cue.__module__.split('.')[2]
             if plugin not in plugins_list:
                 plugins_list.append(plugin)
+
+            plugins_list.extend([p for p in plugins_cue_settings_list if p in cue_properties and p not in plugins_list])
 
         # Save basic plugin info
         plugins_dict = {}
