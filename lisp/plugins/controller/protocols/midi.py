@@ -137,6 +137,8 @@ class MidiSettings(SettingsPage):
             message, action = self.midiModel.getMessage(row)
             entries.append((str(message), action))
 
+        if not entries:
+            return {}
         return {"midi": entries}
 
     def loadSettings(self, settings):
