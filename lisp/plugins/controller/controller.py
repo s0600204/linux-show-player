@@ -131,7 +131,7 @@ class Controller(Plugin):
             elif action is LayoutAction.FadeOutAll:
                 self.app.layout.fadeout_all()
             elif action is LayoutAction.FadeInAll:
-                self.app.layout.fadeout_all()
+                self.app.layout.fadein_all()
             elif action is LayoutAction.StandbyForward:
                 self.app.layout.set_standby_index(
                     self.app.layout.standby_index() + 1
