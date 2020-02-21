@@ -218,8 +218,9 @@ class Application(metaclass=Singleton):
             self.session.update_properties(session_dict["session"])
             self.session.session_file = session_file
 
-            for plugin_name, plugin_config in session_dict['session']['plugins'].items():
-                self.__session.set_plugin_session_config(plugin_name, plugin_config)
+            if 'plugins' in session_dict['session']:
+                for plugin_name, plugin_config in session_dict['session']['plugins'].items():
+                    self.__session.set_plugin_session_config(plugin_name, plugin_config)
 
             self.session_initialised.emit(self.__session)
 
