@@ -198,9 +198,14 @@ class Application(metaclass=Singleton):
         session_props.pop("session_file", None)
 
         # Determine plugins used in showfile
-        plugins_list = [
-            self.session.layout.__module__.split(".")[2]
-        ]
+        plugins_list = []
+
+        # Add plugin providing layout
+        layout_plugin = self.session.layout.__module__.split(".")
+        if layout_plugin[0] == "lisp":
+            plugins_list.append(layout_plugin[2])
+        else:
+            plugins_list.append(layout_plugin[0] or layout_plugin[1])
 
         # Plugins that register cue-settings generic to all cue-types.
         #
