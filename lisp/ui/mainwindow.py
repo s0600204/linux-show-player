@@ -329,8 +329,8 @@ class MainWindow(QMainWindow, metaclass=QSingleton):
         self._app.session.layout.view.setParent(None)
 
     def __sessionCreated(self):
-        self._app.session.layout.view.show()
         self.centralWidget().layout().addWidget(self._app.session.layout.view)
+        self._app.session.layout.view.show()
 
     def __simpleCueInsert(self, cueClass):
         try:

@@ -113,8 +113,8 @@ class GstMediaSettings(SettingsPage):
             self._current_page.hide()
 
         self._current_page = self._pages[self.listWidget.row(current)]
-        self._current_page.show()
         self.layout().addWidget(self._current_page, 0, 1, 2, 1)
+        self._current_page.show()
 
     def __edit_pipe(self):
         # Backup the settings
