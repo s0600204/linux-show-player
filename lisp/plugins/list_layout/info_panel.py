@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2016 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QTextDocument
 from PyQt5.QtWidgets import QWidget, QTextEdit, QLineEdit, QVBoxLayout
 
+from lisp.core.signal import Connection
 from lisp.ui.ui_utils import translate
 
 
@@ -63,8 +64,8 @@ class InfoPanel(QWidget):
         self._cue = item
 
         if self._cue is not None:
-            self._cue.changed("name").connect(self._name_changed)
-            self._cue.changed("description").connect(self._desc_changed)
+            self._cue.changed("name").connect(self._name_changed, Connection.QtQueued)
+            self._cue.changed("description").connect(self._desc_changed, Connection.QtQueued)
 
             self._name_changed(self._cue.name)
             self._desc_changed(self._cue.description)
