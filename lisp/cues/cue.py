@@ -138,8 +138,8 @@ class Cue(HasProperties):
 
         self._st_lock = Lock()
         self._state = CueState.Stop
-        self._prewait = RWait()
-        self._postwait = RWait()
+        self._prewait = RWait(self)
+        self._postwait = RWait(self)
 
         # Pre-Wait signals
         self.prewait_start = self._prewait.start

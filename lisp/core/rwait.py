@@ -24,10 +24,11 @@ from lisp.core.signal import Signal
 class RWait:
     """Provide a resumeable-wait mechanism."""
 
-    def __init__(self):
+    def __init__(self, owner):
         self._elapsed = 0
         self._start_time = 0
         self._ended = False
+        self._owner = owner
 
         self._waiting = Event()
         self._waiting.set()
@@ -57,7 +58,7 @@ class RWait:
             # Set the start-time
             self._start_time = time.monotonic() - self._elapsed
 
-            self.start.emit()
+            self.start.emit(self._owner)
 
             if lock is not None:
                 lock.release()
@@ -68,7 +69,7 @@ class RWait:
             # If the wait is ended by timeout
             if self._ended:
                 self._elapsed = 0
-                self.ended.emit()
+                self.ended.emit(self._owner)
 
             # Notify that we are not waiting anymore
             self._is_waiting.set()
@@ -90,7 +91,7 @@ class RWait:
             # before `self._waiting.set()` is called in this method.
             if not self._ended:
                 self._elapsed = 0
-                self.stopped.emit()
+                self.stopped.emit(self._owner)
 
     def pause(self):
         """Pause the wait."""
@@ -104,7 +105,7 @@ class RWait:
             # before `self._waiting.set()` is called in this method.
             if not self._ended:
                 self._elapsed = elapsed
-                self.paused.emit()
+                self.paused.emit(self._owner)
 
     def current_time(self):
         """Return the currently elapsed time."""
