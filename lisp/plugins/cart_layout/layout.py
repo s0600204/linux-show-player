@@ -23,6 +23,7 @@ from PyQt5.QtWidgets import QAction, QInputDialog, QMessageBox
 from lisp.command.model import ModelInsertItemsCommand, ModelMoveItemCommand
 from lisp.core.configuration import DummyConfiguration
 from lisp.core.properties import ProxyProperty
+from lisp.core.signal import Signal
 from lisp.cues.cue import Cue
 from lisp.cues.cue_factory import CueFactory
 from lisp.cues.media_cue import MediaCue
@@ -68,6 +69,9 @@ class CartLayout(CueLayout):
 
     def __init__(self, application):
         super().__init__(application)
+
+        self.page_added = Signal()
+        self.page_removed = Signal()
 
         self.__columns = CartLayout.Config["grid.columns"]
         self.__rows = CartLayout.Config["grid.rows"]
@@ -254,12 +258,14 @@ class CartLayout(CueLayout):
         page.moveWidgetRequested.connect(self._move_widget)
         page.copyWidgetRequested.connect(self._copy_widget)
 
+        page_index = self._cart_view.count()
         self._cart_view.addTab(
             page,
             translate("CartLayout", "Page {number}").format(
-                number=self._cart_view.count() + 1
+                number=page_index + 1
             ),
         )
+        self.page_added.emit(page_index, page)
 
     def remove_current_page(self):
         if self._cart_view.count():
@@ -276,6 +282,8 @@ class CartLayout(CueLayout):
 
             self._cart_model.remove_page(index)
             self._cart_view.removeTab(index)
+
+            self.page_removed.emit(index)
 
             page.deleteLater()
 
