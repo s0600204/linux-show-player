@@ -226,7 +226,11 @@ class Application(metaclass=Singleton):
             cue_properties = cue.properties(defaults=False, filter=filter_live_properties)
             session_cues.append(cue_properties)
 
-            plugin = cue.__module__.split('.')[2]
+            plugin = cue.__module__.split('.')
+            if plugin[0] == "lisp":
+                plugin = plugin[2]
+            else:
+                plugin = plugin[0] or plugin[1]
             if plugin not in plugins_list:
                 plugins_list.append(plugin)
 
