@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2020 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,6 +41,11 @@ def is_loaded(plugin_name):
         and DefaultPluginsManager.is_loaded(plugin_name)
     )
 
+def plugin_exists(plugin_name):
+    return (
+        DefaultPluginsManager is not None
+        and DefaultPluginsManager.plugin_exists(plugin_name)
+    )
 
 def get_plugins():
     if DefaultPluginsManager is not None:
