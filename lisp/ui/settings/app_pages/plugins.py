@@ -26,6 +26,7 @@ from PyQt5.QtWidgets import (
 
 from lisp import plugins
 from lisp.core.plugin import PluginState
+from lisp.plugins import plugin_status_icon
 from lisp.ui.icons import IconTheme
 from lisp.ui.qdelegates import BoolCheckBoxDelegate
 from lisp.ui.settings.pages import SettingsPage
@@ -189,14 +190,3 @@ class PluginsView(QTableView):
 
         for column, delegate in enumerate(self.delegates):
             self.setItemDelegateForColumn(column, delegate)
-
-
-def plugin_status_icon(plugin):
-    if plugin.State & PluginState.Error:
-        return "led-error"
-    elif plugin.State & PluginState.Warning:
-        return "led-pause"
-    elif plugin.State & PluginState.Loaded:
-        return "led-running"
-
-    return "led-off"
