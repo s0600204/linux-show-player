@@ -115,6 +115,7 @@ class MidiSettings(SettingsPage):
         self._defaultAction = None
         try:
             self.__midi = get_plugin("Midi")
+            self.setEnabled(self.__midi.is_loaded())
         except PluginNotLoadedError:
             self.setEnabled(False)
 

@@ -125,14 +125,17 @@ class PluginsManager:
             yield name, plugin
 
     def get_plugin(self, plugin_name: str) -> Plugin:
-        if self.is_loaded(plugin_name):
+        if self.plugin_exists(plugin_name):
             return self._plugins[plugin_name]
         else:
             raise PluginNotLoadedError(
                 translate(
-                    "PluginsError", 'The requested plugin is not loaded: "{}"'
+                    "PluginsError", 'The requested plugin does not exist: "{}"'
                 ).format(plugin_name)
             )
+
+    def plugin_exists(self, plugin_name) -> bool:
+        return plugin_name in self._plugins
 
     def finalize_plugins(self):
         """Finalize all the plugins."""

@@ -286,6 +286,7 @@ class OscSettings(SettingsPage):
         self._defaultAction = None
         try:
             self.__osc = get_plugin("Osc")
+            self.setEnabled(self.__osc.is_loaded())
         except PluginNotLoadedError:
             self.setEnabled(False)
 

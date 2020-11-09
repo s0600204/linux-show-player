@@ -41,6 +41,11 @@ def is_loaded(plugin_name):
         and DefaultPluginsManager.is_loaded(plugin_name)
     )
 
+def plugin_exists(plugin_name):
+    return (
+        DefaultPluginsManager is not None
+        and DefaultPluginsManager.plugin_exists(plugin_name)
+    )
 
 def get_plugins():
     if DefaultPluginsManager is not None:
