@@ -59,3 +59,14 @@ def get_plugin(plugin_name):
         return DefaultPluginsManager.get_plugin(plugin_name)
     else:
         raise RuntimeError("Cannot get plugins before they have been loaded.")
+
+
+def plugin_status_icon(plugin):
+    if plugin.State & PluginState.Error:
+        return "led-error"
+    elif plugin.State & PluginState.Warning:
+        return "led-pause"
+    elif plugin.State & PluginState.Loaded:
+        return "led-running"
+
+    return "led-off"
