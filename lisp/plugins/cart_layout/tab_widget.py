@@ -19,6 +19,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QTabWidget
 
+from lisp.core.signal import Signal
 from lisp.ui.widgets.qeditabletabbar import QEditableTabBar
 
 
@@ -35,6 +36,9 @@ class CartTabWidget(QTabWidget):
 
         self.setFocusPolicy(Qt.StrongFocus)
         self.setAcceptDrops(True)
+
+        self.page_renamed = Signal()
+        self.tabBar().textChanged.connect(self.page_renamed.emit)
 
     def dragEnterEvent(self, event):
         if event.mimeData().text() == CartTabWidget.DRAG_MAGIC:
@@ -61,9 +65,13 @@ class CartTabWidget(QTabWidget):
 
         return texts
 
+    def setTabText(self, index, label):
+        super().setTabText(index, label)
+        self.page_renamed.emit(index, label)
+
     def setTabTexts(self, texts):
         for i, text in enumerate(texts):
-            self.tabBar().setTabText(i, text)
+            self.setTabText(i, text)
 
     def pages(self):
         for index in range(self.count()):

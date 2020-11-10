@@ -83,6 +83,8 @@ class KeyboardSettings(SettingsPage):
         self.setGroupEnabled(self.keyGroup, enabled)
 
     def getSettings(self):
+        if not self.keyboardModel.rows:
+            return {}
         return {"keyboard": self.keyboardModel.rows}
 
     def loadSettings(self, settings):

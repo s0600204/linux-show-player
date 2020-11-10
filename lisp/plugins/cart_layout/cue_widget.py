@@ -262,6 +262,7 @@ class CueWidget(QWidget):
         self._cue.stopped.connect(self._statusStopped, Connection.QtQueued)
         self._cue.paused.connect(self._statusPaused, Connection.QtQueued)
         self._cue.error.connect(self._statusError, Connection.QtQueued)
+        self._cue.error_clear.connect(self._statusStopped, Connection.QtQueued)
         self._cue.end.connect(self._statusStopped, Connection.QtQueued)
 
         # Media cues features dBMeter and seekSlider

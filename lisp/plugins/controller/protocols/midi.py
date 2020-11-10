@@ -115,6 +115,7 @@ class MidiSettings(SettingsPage):
         self._defaultAction = None
         try:
             self.__midi = get_plugin("Midi")
+            self.setEnabled(self.__midi.is_loaded())
         except PluginNotLoadedError:
             self.setEnabled(False)
 
@@ -136,6 +137,8 @@ class MidiSettings(SettingsPage):
             message, action = self.midiModel.getMessage(row)
             entries.append((str(message), action))
 
+        if not entries:
+            return {}
         return {"midi": entries}
 
     def loadSettings(self, settings):

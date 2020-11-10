@@ -144,3 +144,11 @@ class CartPageWidget(QWidget):
 
         if not 0 <= row < self.__rows or not 0 <= column < self.__columns:
             raise IndexError(f"index out of bound {row, column}")
+
+    @property
+    def columns(self):
+        return self.__columns
+
+    @property
+    def rows(self):
+        return self.__rows

@@ -139,8 +139,8 @@ class Cue(HasProperties):
 
         self._st_lock = Lock()
         self._state = CueState.Stop
-        self._prewait = RWait()
-        self._postwait = RWait()
+        self._prewait = RWait(self)
+        self._postwait = RWait(self)
 
         # Pre-Wait signals
         self.prewait_start = self._prewait.start
@@ -166,6 +166,7 @@ class Cue(HasProperties):
         self.stopped = Signal()
         self.paused = Signal()
         self.error = Signal()
+        self.error_clear = Signal()
         self.next = Signal()
         self.end = Signal()
 
@@ -524,6 +525,11 @@ class Cue(HasProperties):
         if locked:
             self._st_lock.release()
 
+    def _clear_error(self):
+        """Explicitly reset the error state"""
+        self._state = CueState.Stop
+        self.error_clear.emit(self)
+
     def _error(self):
         """Remove Running/Pause/Stop state and add Error state."""
         locked = self._st_lock.acquire(blocking=False)
@@ -538,6 +544,11 @@ class Cue(HasProperties):
 
         if locked:
             self._st_lock.release()
+
+    def update_properties(self, properties):
+        if self._state & CueState.Error:
+            self._clear_error()
+        super().update_properties(properties)
 
     def current_time(self):
         """Return the current execution time if available, otherwise 0.
@@ -567,3 +578,7 @@ class Cue(HasProperties):
             or next_action == CueNextAction.SelectAfterEnd
         ):
             self.end.connect(self.next.emit)
+
+    @property
+    def type(self):
+        return self._type_

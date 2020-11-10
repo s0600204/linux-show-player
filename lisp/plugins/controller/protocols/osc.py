@@ -286,6 +286,7 @@ class OscSettings(SettingsPage):
         self._defaultAction = None
         try:
             self.__osc = get_plugin("Osc")
+            self.setEnabled(self.__osc.is_loaded())
         except PluginNotLoadedError:
             self.setEnabled(False)
 
@@ -303,6 +304,8 @@ class OscSettings(SettingsPage):
             message = Osc.key_from_values(row[0], row[1], row[2])
             entries.append((message, row[3]))
 
+        if not entries:
+            return {}
         return {"osc": entries}
 
     def loadSettings(self, settings):
