@@ -542,6 +542,11 @@ class Cue(HasProperties):
         if locked:
             self._st_lock.release()
 
+    def update_properties(self, properties):
+        if self._state & CueState.Error:
+            self._clear_error()
+        super().update_properties(properties)
+
     def current_time(self):
         """Return the current execution time if available, otherwise 0.
 
