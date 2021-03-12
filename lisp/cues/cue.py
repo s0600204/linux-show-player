@@ -40,6 +40,8 @@ class CueState:
     PreWait_Pause = 64
     PostWait_Pause = 128
 
+    Interrupt = 256
+
     IsRunning = Running | PreWait | PostWait
     IsPaused = Pause | PreWait_Pause | PostWait_Pause
     IsStopped = Error | Stop
@@ -479,6 +481,9 @@ class Cue(HasProperties):
         :type fade: bool
         """
         with self._st_lock:
+            self._state |= CueState.Interrupt
+            self.interrupted.emit(self)
+
             # Stop PreWait (if in PreWait(_Pause) nothing else is "running")
             if self._state & (CueState.PreWait | CueState.PreWait_Pause):
                 self._state = CueState.Stop
@@ -501,7 +506,9 @@ class Cue(HasProperties):
                         self._state ^ CueState.Pause
                     )
                     self._state |= CueState.Stop
-                    self.interrupted.emit(self)
+                    self.stopped.emit(self)
+
+            self._state ^= CueState.Interrupt
 
     def __interrupt__(self, fade=False):
         """Implement the cue `interrupt` behavior.
