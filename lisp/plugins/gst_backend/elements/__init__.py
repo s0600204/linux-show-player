@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2021 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ from os.path import dirname
 
 from lisp.backend.media_element import ElementType
 from lisp.core.loading import load_classes
+from lisp.plugins.gst_backend.gst_utils import GstElementExcludes
 
 __INPUTS = {}
 __OUTPUTS = {}
@@ -26,7 +27,9 @@ __PLUGINS = {}
 
 
 def load():
-    for _, element_class in load_classes(__package__, dirname(__file__)):
+    for _, element_class in load_classes(
+        __package__, dirname(__file__), exclude=GstElementExcludes.get()
+    ):
         if element_class.ElementType == ElementType.Input:
             __INPUTS[element_class.__name__] = element_class
         elif element_class.ElementType == ElementType.Output:
