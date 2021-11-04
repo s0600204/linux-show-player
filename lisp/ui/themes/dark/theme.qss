@@ -31,7 +31,7 @@
 QWidget {
     color: palette(text);
     selection-background-color: palette(highlight);
-    selection-color: black;
+    selection-color: palette(highlighted-text);
     outline: none;
 }
 
@@ -66,15 +66,14 @@ QStatusBar {
 }
 
 QToolTip {
-    border: 1px solid palette(window);
+    border: 1px solid palette(light);
+    color: palette(text);
     background-color: palette(base);
     padding: 2px;
 }
 
-QMenuBar::item {
-    background: transparent;
-}
-
+QMenuBar,
+QMenuBar::item,
 QMenuBar::item:selected {
     background: transparent;
 }
@@ -82,7 +81,7 @@ QMenuBar::item:selected {
 QMenuBar::item:pressed {
     border: 1px solid palette(light);
     background-color: palette(highlight);
-    color: black;
+    color: palette(highlighted-text);
     margin-bottom: -1px;
     padding-bottom: 1px;
 }
@@ -96,7 +95,7 @@ QMenu::item {
 }
 
 QMenu::item:selected{
-    color: black;
+    color: palette(highlighted-text);
 }
 
 QMenu::icon,
@@ -106,8 +105,8 @@ QMenu::indicator {
 
 QMenu::separator {
     height: 1px;
-    margin: 4px 0px 4px 0px;
-    background-color: palette(dark);
+    margin: 4px 4px 4px 4px;
+    background-color: palette(midlight);
 }
 
 QAbstractItemView {
@@ -249,6 +248,10 @@ QSizeGrip {
     image: url(:/assets/sizegrip.png);
     width: 12px;
     height: 12px;
+}
+
+QMessageBox {
+    background-color: palette(window);
 }
 
 QMainWindow::separator {
@@ -537,10 +540,7 @@ QTreeView::branch:open:has-children:has-siblings {
     image: url(:/assets/branch-open.png);
 }
 
-QSlider {
-    background: none;
-}
-
+QSlider,
 QSlider:disabled {
     background: none;
 }
@@ -585,8 +585,15 @@ QSlider::add-page:vertical {
 }
 
 QSlider::handle {
-    background-color: #666666;
-    border: 1px solid black;
+    background-color: qlineargradient(
+        x1: 0,
+        y1: 1,
+        x2: 0,
+        y2: 0,
+        stop: 0 palette(midlight),
+        stop: 1 palette(light)
+    );
+    border: 1px solid palette(base);
     border-radius: 2px;
 }
 
@@ -602,8 +609,18 @@ QSlider::handle:vertical {
     height: 8px;
 }
 
+QSlider::handle:focus {
+    border: 1px solid palette(highlight);
+}
+
+QSlider::handle:pressed {
+    background: palette(mid);
+    border: 1px solid palette(highlight);
+}
+
 QSlider::handle:disabled {
-    background-color: #CCCCCC;
+    background-color: palette(mid);
+    border: 1px solid palette(light);
 }
 
 QToolButton {
