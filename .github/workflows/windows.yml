@@ -1,0 +1,88 @@
+name: Windows (msys2) CI Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - msys2-ci
+
+jobs:
+
+  # We use msys2 for the following reasons:
+  #
+  # * Building pygobject isn't supported on MSVC, and they've no
+  #   intention of ever supporting it
+  #
+  # * Building pyliblo is broken on MSVC
+  #   - https://github.com/dsacre/pyliblo/issues/25
+
+  build-msys:
+    name: Windows Build (msys2)
+    runs-on: windows-2019
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - { sys: mingw64, cc: gcc   }
+        - { sys: mingw32, cc: gcc   }
+        - { sys: ucrt64,  cc: gcc   }
+        - { sys: clang64, cc: clang }
+
+    steps:
+
+    # The `:p` suffix tells pacboy to use the version for the current shell
+    # (Saves having to change suffixes if we wish to try alternate shells.)
+    - name: Install and Configure Msys2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.sys }}
+        update: true
+        install: >
+          git
+        pacboy: >
+          cairo:p
+          ${{ matrix.cc }}:p
+          gobject-introspection:p
+          gstreamer:p
+          gst-plugins-good:p
+          liblo:p
+          pkgconf:p
+          python-gobject:p
+          python-pip:p
+          python-pyqt5:p
+          qt5-svg:p
+          rtmidi:p
+
+    - name: Checkout source
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - name: Build/Install via pip
+      run: |
+        pip install .
+
+    - name: Test run LiSP
+      run: |
+        cd ~
+        linux-show-player --help
+
+    - name: Build a wheel
+      id: wheel
+      run: |
+        pip wheel --no-deps .
+        echo "::set-output name=filename::`ls *.whl`"
+
+    # There's no difference between wheels created by the different
+    # environments, so only save one.
+    - name: Upload wheel
+      if: ${{ matrix.sys == 'mingw64' }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.wheel.outputs.filename }}
+        path: ${{ steps.wheel.outputs.filename }}
