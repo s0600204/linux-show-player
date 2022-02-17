@@ -63,8 +63,12 @@ jobs:
       with:
         fetch-depth: 1
 
+    # The `export CC=...` is only *needed* on the `clang64` build (as distutils
+    # assumes a default compiler of `gcc` for all environments), but doesn't
+    # harm the other builds.
     - name: Build/Install via pip
       run: |
+        export CC=${{ matrix.cc }}
         pip install .
 
     - name: Test run LiSP
