@@ -29,8 +29,11 @@ jobs:
       matrix:
         include:
         - { sys: mingw64, cc: gcc   }
+        - { sys: mingw64, cc: clang }
         - { sys: mingw32, cc: gcc   }
+        - { sys: mingw32, cc: clang }
         - { sys: ucrt64,  cc: gcc   }
+        - { sys: ucrt64,  cc: clang }
         - { sys: clang64, cc: clang }
 
     steps:
@@ -63,8 +66,8 @@ jobs:
       with:
         fetch-depth: 1
 
-    # The `export CC=...` is only *needed* on the `clang64` build (as distutils
-    # assumes a default compiler of `gcc` for all environments), but doesn't
+    # The `export CC=...` is only needed on builds using clang as distutils
+    # assumes a default compiler of `gcc` for all environments, but doesn't
     # harm the other builds.
     - name: Build/Install via pip
       run: |
@@ -85,7 +88,7 @@ jobs:
     # There's no difference between wheels created by the different
     # environments, so only save one.
     - name: Upload wheel
-      if: ${{ matrix.sys == 'mingw64' }}
+      if: ${{ matrix.sys == 'mingw64' && matrix.cc == 'gcc' }}
       uses: actions/upload-artifact@v2
       with:
         name: ${{ steps.wheel.outputs.filename }}
