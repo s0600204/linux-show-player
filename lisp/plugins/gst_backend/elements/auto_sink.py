@@ -30,8 +30,13 @@ class AutoSink(GstMediaElement):
     def __init__(self, pipeline):
         super().__init__(pipeline)
 
+        self.audio_resample = Gst.ElementFactory.make("audioresample")
         self.auto_sink = Gst.ElementFactory.make("autoaudiosink", "sink")
+
+        self.pipeline.add(self.audio_resample)
         self.pipeline.add(self.auto_sink)
 
+        self.audio_resample.link(self.auto_sink)
+
     def sink(self):
-        return self.auto_sink
+        return self.audio_resample
