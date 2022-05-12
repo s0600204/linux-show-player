@@ -35,6 +35,7 @@ jobs:
         - { sys: ucrt64,  cc: gcc   }
         - { sys: ucrt64,  cc: clang }
         - { sys: clang64, cc: clang }
+        - { sys: clang32, cc: clang }
 
     steps:
 
