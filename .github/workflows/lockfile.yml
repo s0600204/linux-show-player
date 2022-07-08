@@ -1,0 +1,128 @@
+name: Poetry Lockfile rebuild
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - ci-lockfile
+
+jobs:
+
+  rebuild:
+    name: Lockfile Rebuild
+    runs-on: ${{ matrix.sys.os }}
+
+    env:
+      # As of 1.2.0b2 poetry uses Dulwich by default to perform git operations instead of git
+      # itself. Unfortunately this doesn't work very well on Ubuntu and causes TLS handshake
+      # timeouts when trying to communicate with *public* repositories on *GitHub*.
+      #
+      # To get round this, we force the system git. But that option doesn't exist prior to
+      # 1.2.0b2, and can't be set via `poetry config ...` *on* 1.2.0b2.
+      #
+      # @see https://github.com/python-poetry/poetry/pull/5428
+      force_system_git: >
+        [
+          "1.2.2",
+          "1.2.1",
+          "1.2.0",
+          "1.2.0rc2",
+          "1.2.0rc1",
+          "1.2.0b3"
+        ]
+
+      # As of 1.2.0b2 poetry tries to access the system Keyring for more actions than it did
+      # before. This causes problems on the Ubuntu CI - but not on Windows - for reasons that
+      # are unclear. (Backend installed but not running? System not capable of prompting a
+      # user to login to unlock the keychain as it's a CI system?)
+      #
+      # @see https://github.com/python-poetry/poetry/issues/1917
+      PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
+
+    defaults:
+      run:
+        shell: ${{ matrix.sys.shell }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        sys:
+        - os: windows-2019
+          shell: msys2 {0}
+        - os: ubuntu-latest
+          shell: bash
+
+        poetVers:
+        - 1.2.2
+        - 1.2.1
+        - 1.2.0
+        - 1.2.0rc2
+        - 1.2.0rc1
+        - 1.2.0b3
+        - 1.2.0b2
+        - 1.2.0b1
+        - 1.2.0a2
+        #~ - 1.2.0a1    # :: AttributeError: can't set attribute 'requires'
+        # As of 2022-10-16, upstream altered the syntax of pyproject.toml to be incompatible with Poetry 1.1.x
+
+        exclude:
+        # TLS Timeout (due to Dulwich); unable to use the same work around as later versions as
+        # `experimental.system-git-client` is not a supported config option on the command line.
+        - sys:
+            os: ubuntu-latest
+          poetVers: 1.2.0b2
+
+    steps:
+
+    # This should closely mirror the msys2-ci workflow file
+    - name: Install and Configure Msys2
+      if: ${{ matrix.sys.os == 'windows-2019' }}
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ucrt64
+        update: true
+        install: >
+          git
+        pacboy: >
+          cairo:p
+          gcc:p
+          gobject-introspection:p
+          gstreamer:p
+          gst-plugins-good:p
+          liblo:p
+          pkgconf:p
+          python-gobject:p
+          python-pip:p
+          python-pyqt5:p
+          qt5-svg:p
+          rtmidi:p
+
+    - name: Update pip
+      run: |
+        python -m pip install -U pip
+
+    - name: Install Poetry via pip
+      run: |
+        pip install poetry==${{ matrix.poetVers }}
+
+    - name: Checkout source
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+
+    - name: Force system git client
+      if: ${{ matrix.sys.os == 'ubuntu-latest' && contains(toJson(env.force_system_git), matrix.poetVers) }}
+      run: |
+        poetry config experimental.system-git-client true
+
+    - name: Rebuild lockfile
+      run: |
+        poetry lock -v
+
+    # Each of the jobs *should* generate the same (platform-agnostic) lockfile.
+    # However they might not, so upload all of them for comparison.
+    - name: Upload lockfile
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.sys.os }}__${{ matrix.poetVers }}__poetry.lock
+        path: poetry.lock
