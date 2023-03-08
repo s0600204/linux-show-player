@@ -13,24 +13,6 @@ jobs:
     runs-on: ${{ matrix.sys.os }}
 
     env:
-      # As of 1.2.0b2 poetry uses Dulwich by default to perform git operations instead of git
-      # itself. Unfortunately this doesn't work very well on Ubuntu and causes TLS handshake
-      # timeouts when trying to communicate with *public* repositories on *GitHub*.
-      #
-      # To get round this, we force the system git. But that option doesn't exist prior to
-      # 1.2.0b2, and can't be set via `poetry config ...` *on* 1.2.0b2.
-      #
-      # @see https://github.com/python-poetry/poetry/pull/5428
-      force_system_git: >
-        [
-          "1.2.2",
-          "1.2.1",
-          "1.2.0",
-          "1.2.0rc2",
-          "1.2.0rc1",
-          "1.2.0b3"
-        ]
-
       # As of 1.2.0b2 poetry tries to access the system Keyring for more actions than it did
       # before. This causes problems on the Ubuntu CI - but not on Windows - for reasons that
       # are unclear. (Backend installed but not running? System not capable of prompting a
@@ -53,24 +35,12 @@ jobs:
           shell: bash
 
         poetVers:
+        - 1.4.0
+        - 1.3.1
+        - 1.3.0
         - 1.2.2
         - 1.2.1
         - 1.2.0
-        - 1.2.0rc2
-        - 1.2.0rc1
-        - 1.2.0b3
-        - 1.2.0b2
-        - 1.2.0b1
-        - 1.2.0a2
-        #~ - 1.2.0a1    # :: AttributeError: can't set attribute 'requires'
-        # As of 2022-10-16, upstream altered the syntax of pyproject.toml to be incompatible with Poetry 1.1.x
-
-        exclude:
-        # TLS Timeout (due to Dulwich); unable to use the same work around as later versions as
-        # `experimental.system-git-client` is not a supported config option on the command line.
-        - sys:
-            os: ubuntu-latest
-          poetVers: 1.2.0b2
 
     steps:
 
@@ -104,14 +74,28 @@ jobs:
     - name: Install Poetry via pip
       run: |
         pip install poetry==${{ matrix.poetVers }}
+        pip list | grep poetry
 
     - name: Checkout source
       uses: actions/checkout@v3
       with:
         fetch-depth: 1
 
+    # Without this, we get a series of "MaxRetryError" errors when rebuilding the lockfile on
+    # Windows, seemingly caused by not being able to verify certificates.
+    #
+    # The VM version of git appears to be configured to use a file that may assist with this,
+    # however attempting to tell the MSys2 version of git to use the exact same config fails
+    # with the same error.
+    #
+    # I suspect that this may be some fault or shortcoming in Dulwich, which is what poetry uses
+    # instead of querying the git client.
+    # 
+    # We still need to install a version of git via MSys2, as a git client is needed to clone
+    # dependencies not available via pip, and the VM version of git can seemingly not be found
+    # when inside an MSys2 shell.
     - name: Force system git client
-      if: ${{ matrix.sys.os == 'ubuntu-latest' && contains(toJson(env.force_system_git), matrix.poetVers) }}
+      if: ${{ matrix.sys.os == 'windows-2019' }}
       run: |
         poetry config experimental.system-git-client true
 
