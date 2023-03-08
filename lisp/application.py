@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -128,6 +128,9 @@ class Application(metaclass=Singleton):
                 self.__new_session(layout.get_layout(layout_name))
             else:
                 self.__new_session_dialog()
+
+    def create_session(self, layout_name):
+        self.__new_session(layout.get_layout(layout_name))
 
     def finalize(self):
         self.__delete_session()
