@@ -1,0 +1,28 @@
+Description: Installs icons under usr/share/linux-whos-player directory
+Author: Josue Ortega <josue@debian.org>
+Last-Update: 2017-12-03
+Forwarded: not-needed
+
+--- a/lisp/ui/styles/styles.py
++++ b/lisp/ui/styles/styles.py
+@@ -30,7 +30,9 @@
+     from scandir import scandir
+ 
+ StylesPath = os.path.abspath(os.path.dirname(__file__))
+-IconsThemePaths = [os.path.join(StylesPath, 'icons')]
++DEBIAN_PATH = '/usr/share/linux-show-player'
++DebianIconPath = os.path.abspath(DEBIAN_PATH)
++IconsThemePaths = [os.path.join(DebianIconPath, 'icons')]
+ 
+ LiSPStyles = {}
+ Style = namedtuple('Style', ['path', 'has_qss', 'has_py'])
+--- a/setup.py
++++ b/setup.py
+@@ -39,7 +39,6 @@
+     packages=find_packages(),
+     package_data={
+         '': ['i18n/*.qm', '*.qss', '*.cfg'],
+-        'lisp.ui.styles': lisp_icons,
+     },
+     scripts=['linux-show-player']
+ )

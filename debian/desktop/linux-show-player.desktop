@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=linux-show-player
+Comment=Linux Show Player - free cue player designed for sound-playback in stage production
+Name=Linux Show Player
+Categories=Audio;AudioVideo;AudioVideoEditing;
+Keywords=mp3;midi;cue;audio;track;cover;player;
