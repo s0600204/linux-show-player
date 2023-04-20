@@ -1,0 +1,14 @@
+lisp/backend usr/lib/python3/dist-packages/lisp
+lisp/command usr/lib/python3/dist-packages/lisp
+lisp/core usr/lib/python3/dist-packages/lisp
+lisp/cues usr/lib/python3/dist-packages/lisp
+lisp/i18n usr/lib/python3/dist-packages/lisp
+lisp/layout usr/lib/python3/dist-packages/lisp
+lisp/ui/icons/__init__.py usr/lib/python3/dist-packages/lisp/ui/icons
+lisp/ui/icons/lisp usr/share/linux-show-player/icons
+lisp/ui/icons/Numix usr/share/linux-show-player/icons
+lisp/ui/settings usr/lib/python3/dist-packages/lisp/ui
+lisp/ui/themes usr/lib/python3/dist-packages/lisp/ui
+lisp/ui/widgets usr/lib/python3/dist-packages/lisp/ui
+dist/linuxshowplayer.desktop usr/share/applications
+dist/linuxshowplayer.png usr/share/pixmaps

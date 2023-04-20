@@ -16,28 +16,179 @@ Rules-Requires-Root: no
 
 Package: linux-show-player
 Architecture: all
-Multi-Arch: foreign
-Depends: ${misc:Depends}, ${shlibs:Depends}, ${python3:Depends},
- python3-sortedcontainers,
- python3-mido,
- python3-rtmidi,
- python3-jack-client,
- python3-pyqt5,
- python3-gst-1.0
-Description: Free cue player designed for sound-playback in stage productions
+Depends:
+ ${misc:Depends},
+ linux-show-player-minimal,
+ linux-show-player-action-cues,
+ linux-show-player-cache-manager,
+ linux-show-player-cart-layout,
+ linux-show-player-controller,
+ linux-show-player-gst-backend,
+ linux-show-player-list-layout,
+ linux-show-player-media-info,
+ linux-show-player-midi,
+ linux-show-player-network,
+ linux-show-player-osc,
+ linux-show-player-presets,
+ linux-show-player-rename-cues,
+ linux-show-player-replay-gain,
+ linux-show-player-synchronizer,
+ linux-show-player-timecode,
+ linux-show-player-triggers
+Description: Free cue player designed for sound-playback in stage productions.
  Linux Show Player (or LiSP for short) is a free cue player designed for
  sound-playback in stage productions. The goal of the project is to provide a
- complete playback software for musical plays, theater shows and similar.
+ complete playback software for musical plays, theatre shows and similar.
+ .
  Here a list of the main functionality offered by LiSP:
-  - Cart layout (buttons matrix) suited for touchscreens
-  - List layout suited for keyboards
-  - Large media-format support thanks to GStreamer
+ .
+  - Cart layout (buttons matrix) suited for touchscreens;
+  - List layout suited for keyboards;
+  - Large media-format support thanks to GStreamer;
   - Realtime sound effects: equalization, pitch shift, speed control,
-    compression.
-  - Peak and ReplayGain normalization
-  - Undo/Redo changes
-  - Remote control over network, between two or more sessions
-  - ArtNet Timecode (via OLA)
-  - MIDI support for cue triggering
-  - MIDI cues (send MIDI messages)
-  - Multi-language support
+    compression;
+  - Peak and ReplayGain normalization;
+  - Undo/Redo changes;
+  - Remote control over network, between two or more sessions;
+  - ArtNet Timecode (via OLA);
+  - MIDI support for cue triggering;
+  - MIDI cues (send MIDI messages);
+  - Multi-language support.
+
+Package: linux-show-player-minimal
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ linux-show-player-layout,
+ python3-pyqt5,
+ python3-sortedcontainers
+Description: Minimal installation of Linux Show Player.
+
+Package: linux-show-player-action-cues
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Description: A collection of cues to extend base functions.
+
+Package: linux-show-player-cache-manager
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Description: Utility to manage application cache.
+
+Package: linux-show-player-cart-layout
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Provides: linux-show-player-layout
+Description: Provides a layout that organizes cues in grid-like pages.
+
+Package: linux-show-player-controller
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Suggests:
+ linux-show-player-midi,
+ linux-show-player-osc
+Description: Allows to control cues via external commands with multiple protocols.
+
+Package: linux-show-player-gst-backend
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ python3-gst-1.0
+Suggests:
+ python3-jack-client
+Description: Provide audio playback capabilities via the GStreamer framework.
+ (You will need this to play media files!)
+
+Package: linux-show-player-list-layout
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Provides: linux-show-player-layout
+Description: Provides a layout that organizes the cues in a list.
+
+Package: linux-show-player-media-info
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ linux-show-player-gst
+Description: Provide a function to show information of media-cues.
+
+Package: linux-show-player-midi
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ python3-mido,
+ python3-rtmidi
+Description: Provide MIDI I/O functionality.
+
+Package: linux-show-player-network
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Description: Allow the application to be controlled via network.
+
+Package: linux-show-player-osc
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ python3-liblo
+Description: Provide OSC I/O functionality.
+
+Package: linux-show-player-presets
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Description: Allow to save, edit, import and export cue presets.
+
+Package: linux-show-player-rename-cues
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Description: Provide a dialog for batch renaming of cues.
+
+Package: linux-show-player-replay-gain
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Description: Allow to normalize cues volume.
+
+Package: linux-show-player-synchronizer
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ linux-show-player-network
+Description: Keep multiple sessions, in a network, synchronized.
+
+Package: linux-show-player-timecode
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Recommends:
+ linux-show-player-midi
+Description: Provide timecode via multiple protocols.
+
+Package: linux-show-player-triggers
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends}
+Description: Allow cues to react to other-cues state changes.
