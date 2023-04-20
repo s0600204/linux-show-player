@@ -2,18 +2,16 @@ Source: linux-show-player
 Section: sound
 Priority: optional
 Maintainer: Josue Ortega <josue@debian.org>
-Build-Depends: debhelper-compat (= 13),
- dh-python,
- python3-setuptools,
+Build-Depends:
+ debhelper-compat (= 13),
+ pybuild-plugin-pyproject,
  python3-all,
- python3-sortedcontainers,
- python3-mido,
- python3-rtmidi
+ python3-poetry-core,
+ python3-setuptools
 Standards-Version: 4.6.0
-Homepage: http://linux-show-player.sourceforge.net
-X-Python3-Version: >= 3.10
-Vcs-Git: https://salsa.debian.org/debian/linux-show-player.git
-Vcs-Browser: https://salsa.debian.org/debian/linux-show-player
+Homepage: https://linux-show-player.org
+Vcs-Git: https://github.com/s0600204/linux-show-player.git
+Vcs-Browser: https://github.com/s0600204/linux-show-player
 Rules-Requires-Root: no
 
 Package: linux-show-player

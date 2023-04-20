@@ -3,13 +3,10 @@
 #DH_VERBOSE = 1
 
 export PYBUILD_NAME=linux-show-player
+export PYBUILD_SYSTEM=pyproject
 
 %:
 	dh $@ --with python3 --buildsystem=pybuild
-
-override_dh_auto_install:
-	rm -f $(CURDIR)/lisp/ui/styles/icons/LICENSE
-	dh_auto_install
 
 override_dh_auto_test:
 # pass upstream tests, since OLA is only available for python2

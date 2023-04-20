@@ -1,28 +1,14 @@
-Description: Installs icons under usr/share/linux-whos-player directory
-Author: Josue Ortega <josue@debian.org>
-Last-Update: 2017-12-03
+Description: Installs icons under /usr/share/linux-show-player directory
+Author: s0600204 <dev@s0600204>
+Last-Update: 2023-04-20
 Forwarded: not-needed
 
---- a/lisp/ui/styles/styles.py
-+++ b/lisp/ui/styles/styles.py
-@@ -30,7 +30,9 @@
-     from scandir import scandir
+--- a/lisp/__init__.py
++++ b/lisp/__init__.py
+@@ -44,5 +44,5 @@
  
- StylesPath = os.path.abspath(os.path.dirname(__file__))
--IconsThemePaths = [os.path.join(StylesPath, 'icons')]
-+DEBIAN_PATH = '/usr/share/linux-show-player'
-+DebianIconPath = os.path.abspath(DEBIAN_PATH)
-+IconsThemePaths = [os.path.join(DebianIconPath, 'icons')]
+ DEFAULT_CACHE_DIR = path.join(app_dirs.user_data_dir, "cache")
  
- LiSPStyles = {}
- Style = namedtuple('Style', ['path', 'has_qss', 'has_py'])
---- a/setup.py
-+++ b/setup.py
-@@ -39,7 +39,6 @@
-     packages=find_packages(),
-     package_data={
-         '': ['i18n/*.qm', '*.qss', '*.cfg'],
--        'lisp.ui.styles': lisp_icons,
-     },
-     scripts=['linux-show-player']
- )
+-ICON_THEMES_DIR = path.join(APP_DIR, "ui", "icons")
++ICON_THEMES_DIR = path.join("/usr/share/linux-show-player", "ui", "icons")
+ ICON_THEME_COMMON = "lisp"

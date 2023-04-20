@@ -1,2 +1,2 @@
-lisp/ui/styles/icons usr/share/linux-show-player
-debian/desktop/linux-show-player.desktop usr/share/applications
+lisp/ui/icons usr/share/linux-show-player
+dist/linuxshowplayer.desktop usr/share/applications/linux-show-player.desktop

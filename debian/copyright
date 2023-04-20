@@ -6,28 +6,26 @@ Files: *
 Copyright: 2012-2017 Francesco Ceruti <ceppofrancy@gmail.com>
 License:   GPL-3.0+
 
-Files: lisp/plugins/timecode/__init__.py
-       lisp/plugins/timecode/timecode.py
-       lisp/plugins/timecode/timecode_settings.py
+Files: lisp/plugins/timecode/*.py
 Copyright: 2012-2017 Francesco Ceruti <ceppofrancy@gmail.com>
            2016 Thomas Achtner <info@offtools.de>
 License:   GPL-3.0+
 
-Files: lisp/ui/styles/dark/style.qss
+Files: lisp/ui/themes/dark/style.qss
 Copyright: 2012-2014 Ceruti Francesco & contributors
 License: MIT
 Comment: Based on ColinDuquesnoy works at: https://github.com/ColinDuquesnoy/QDarkStyleSheet/
 
-Files: lisp/ui/styles/icons/lisp/16/fadein-linear.png
-       lisp/ui/styles/icons/lisp/16/fadein-quadratic.png
-       lisp/ui/styles/icons/lisp/16/fadein-quadratic2.png
-       lisp/ui/styles/icons/lisp/16/fadeout-linear.png
-       lisp/ui/styles/icons/lisp/16/fadeout-quadratic.png
-       lisp/ui/styles/icons/lisp/16/fadeout-quadratic2.png
+Files: lisp/ui/icons/lisp/fadein-linear.png
+       lisp/ui/icons/lisp/fadein-quadratic.png
+       lisp/ui/icons/lisp/fadein-quadratic2.png
+       lisp/ui/icons/lisp/fadeout-linear.png
+       lisp/ui/icons/lisp/fadeout-quadratic.png
+       lisp/ui/icons/lisp/fadeout-quadratic2.png
 Copyright: 2017 Rui Nuno Capela <rncbc@rncbc.org>
 License: GPL-2
 
-Files: lisp/ui/styles/icons/numix/*
+Files: lisp/ui/icons/Numix/*
 Copyright: 2017 Numix Project Ltd
 License: GPL-3
 
