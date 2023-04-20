@@ -1,3 +1,10 @@
+linux-show-player (0.6.0~dev-1) UNRELEASED; urgency=medium
+
+  * Split package into multiple packages
+  * Update to current upstream development point
+  
+ -- s0600204 <dev@s0600204>  Thu, 20 Apr 2023 15:01:00 +0100
+
 linux-show-player (0.5.3-1) unstable; urgency=medium
 
   * New upstream release (0.5.3). Closes: #1009095.
