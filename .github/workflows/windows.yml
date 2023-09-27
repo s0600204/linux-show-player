@@ -70,9 +70,14 @@ jobs:
     # The `export CC=...` is only needed on builds using clang as distutils
     # assumes a default compiler of `gcc` for all environments, but doesn't
     # harm the other builds.
+    #
+    # According to the known issues (https://www.msys2.org/docs/python/#known-issues),
+    # setuptools >= 60.0 is not compatible with MSys2 (or vice-versa). The
+    # `SETUPTOOLS_USE_DISTUTILS=stdlib` is the recommended work-around.
     - name: Build/Install via pip
       run: |
         export CC=${{ matrix.cc }}
+        export SETUPTOOLS_USE_DISTUTILS=stdlib
         pip install .
 
     - name: Test run LiSP
