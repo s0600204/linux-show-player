@@ -35,6 +35,8 @@ jobs:
           shell: bash
 
         poetVers:
+        - 1.6.1
+        - 1.6.0
         - 1.5.1
         - 1.5.0
         - 1.4.2
@@ -104,7 +106,7 @@ jobs:
     #
     # I suspect that this may be some fault or shortcoming in Dulwich, which is what poetry uses
     # instead of querying the git client.
-    # 
+    #
     # We still need to install a version of git via MSys2, as a git client is needed to clone
     # dependencies not available via pip, and the VM version of git can seemingly not be found
     # when inside an MSys2 shell.
