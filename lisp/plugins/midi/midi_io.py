@@ -43,6 +43,34 @@ class MIDIBase(ABC):
     def port(self):
         return self._port
 
+    def update_client_name(self):
+        """
+        This attempts to set a name with which LiSP's connections may be recognised when seen in
+        other programs, (such as qjackctl, QLC+).
+
+        mido itself only supports setting a client/port name when creating a "virtual" port - a
+        port intended to be made available for other applications to connect to. Thus to set the
+        name of a non-virtual port we have to go through mido's internals so as to use the API
+        of the backend in use.
+
+        At this time only one of mido's five possible backends supports this: "rtmidi". However
+        this backend is the default backend for both mido and LiSP, and the backend that mido
+        recommends.
+        """
+        if (
+            not self._port
+            or self._backend.name != 'mido.backends.rtmidi'
+            or not hasattr(self._port, "_rt")
+        ):
+            return
+
+        try:
+            # Still might not be possible, e.g. on Windows
+            self._port._rt.set_client_name("Linux Show Player")
+            self._port._rt.set_port_name("Linux Show Player")
+        except NotImplementedError:
+            return
+
     def port_name(self, real=True):
         if real and self._port is not None:
             return self._port.name
@@ -79,6 +107,7 @@ class MIDIOutput(MIDIBase):
     def open(self):
         try:
             self._port = self._backend.open_output(self._port_name)
+            self.update_client_name()
         except OSError:
             logger.exception(
                 translate(
@@ -100,6 +129,7 @@ class MIDIInput(MIDIBase):
             self._port = self._backend.open_input(
                 name=self._port_name, callback=self.__new_message
             )
+            self.update_client_name()
         except OSError:
             logger.exception(
                 translate(
