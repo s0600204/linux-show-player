@@ -21,6 +21,11 @@ jobs:
       # @see https://github.com/python-poetry/poetry/issues/1917
       PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
 
+      # According to MSys2's list of known issues (https://www.msys2.org/docs/python/#known-issues),
+      # setuptools >= 60.0 is not compatible with MSys2 (or vice-versa).
+      # `SETUPTOOLS_USE_DISTUTILS=stdlib` is the recommended work-around.
+      SETUPTOOLS_USE_DISTUTILS: stdlib
+
     defaults:
       run:
         shell: ${{ matrix.sys.shell }}
@@ -64,6 +69,7 @@ jobs:
           gstreamer:p
           gst-plugins-good:p
           liblo:p
+          ninja:p
           pkgconf:p
           python-gobject:p
           python-pip:p
