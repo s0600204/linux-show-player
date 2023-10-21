@@ -64,7 +64,7 @@ jobs:
           rtmidi:p
 
     - name: Checkout source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 1
 
@@ -90,13 +90,13 @@ jobs:
       id: wheel
       run: |
         pip wheel --no-deps .
-        echo "::set-output name=filename::`ls *.whl`"
+        echo "filename=`ls *.whl`" >> $GITHUB_OUTPUT
 
     # There's no difference between wheels created by the different
     # environments, so only save one.
     - name: Upload wheel
       if: ${{ matrix.sys == 'mingw64' && matrix.cc == 'gcc' }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.wheel.outputs.filename }}
         path: ${{ steps.wheel.outputs.filename }}
