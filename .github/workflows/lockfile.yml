@@ -34,7 +34,7 @@ jobs:
       fail-fast: false
       matrix:
         sys:
-        - os: windows-2019
+        - os: windows-latest
           shell: msys2 {0}
         - os: ubuntu-latest
           shell: bash
@@ -55,7 +55,7 @@ jobs:
 
     # This should closely mirror the msys2-ci workflow file
     - name: Install and Configure Msys2
-      if: ${{ matrix.sys.os == 'windows-2019' }}
+      if: ${{ startsWith(matrix.sys.os, 'windows') }}
       uses: msys2/setup-msys2@v2
       with:
         msystem: ucrt64
@@ -89,7 +89,7 @@ jobs:
     # as this is only a build-time dependancy, we should be able to satisfy poetry's requirement
     # by specifying a version, and hope that pip doesn't try to update it to a newer version.
     - name: Pin jsonschema
-      if: ${{ matrix.sys.os == 'windows-2019' }}
+      if: ${{ startsWith(matrix.sys.os, 'windows') }}
       run: |
         pip install "jsonschema<4.18.0"
 
@@ -117,7 +117,7 @@ jobs:
     # dependencies not available via pip, and the VM version of git can seemingly not be found
     # when inside an MSys2 shell.
     - name: Force system git client
-      if: ${{ matrix.sys.os == 'windows-2019' }}
+      if: ${{ startsWith(matrix.sys.os, 'windows') }}
       run: |
         poetry config experimental.system-git-client true
 
