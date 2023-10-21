@@ -55,6 +55,7 @@ jobs:
           gstreamer:p
           gst-plugins-good:p
           liblo:p
+          ninja:p
           pkgconf:p
           python-gobject:p
           python-pip:p
