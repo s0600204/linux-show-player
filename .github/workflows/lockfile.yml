@@ -38,6 +38,8 @@ jobs:
           shell: msys2 {0}
         - os: ubuntu-latest
           shell: bash
+        - os: macos-latest
+          shell: bash
 
         poetVers:
         - 1.6.1
