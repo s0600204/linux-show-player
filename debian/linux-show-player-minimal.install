@@ -1,4 +1,5 @@
 usr/bin/*
+usr/lib/python3*/*-packages/*.dist-info/*
 lisp/backend usr/lib/python3/dist-packages/lisp
 lisp/command usr/lib/python3/dist-packages/lisp
 lisp/core usr/lib/python3/dist-packages/lisp
