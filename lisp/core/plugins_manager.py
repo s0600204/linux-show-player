@@ -46,6 +46,8 @@ class PluginsManager:
         """Load and instantiate available plugins."""
 
         # Plugins shipped in the package
+        if PLUGINS_PATH not in sys.path:
+            sys.path.insert(1, PLUGINS_PATH)
         lisp_plugins = load_classes(PLUGINS_PACKAGE, PLUGINS_PATH)
 
         # Plugins installed by the user
