@@ -24,7 +24,7 @@ jobs:
       # According to MSys2's list of known issues (https://www.msys2.org/docs/python/#known-issues),
       # setuptools >= 60.0 is not compatible with MSys2 (or vice-versa).
       # `SETUPTOOLS_USE_DISTUTILS=stdlib` is the recommended work-around.
-      SETUPTOOLS_USE_DISTUTILS: stdlib
+      SETUPTOOLS_USE_DISTUTILS: ${{ matrix.sys.distutils }}
 
     defaults:
       run:
@@ -41,10 +41,13 @@ jobs:
         sys:
         - os: windows-latest
           shell: msys2 {0}
+          distutils: stdlib
         #- os: ubuntu-latest
         #  shell: bash
+        #  distutils: local
         - os: macos-latest
           shell: bash
+          distutils: local
 
         poetVers:
         - 1.6.1
