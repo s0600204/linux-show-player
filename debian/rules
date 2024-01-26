@@ -2,7 +2,6 @@
 
 #DH_VERBOSE = 1
 
-export PYBUILD_NAME=linux-show-player
 export PYBUILD_SYSTEM=pyproject
 
 %:

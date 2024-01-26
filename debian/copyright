@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: linux-show-player
-Source: https://github.com/FrancescoCeruti/linux-show-player
+Source: https://github.com/s0600204/linux-show-player
 
 Files: *
 Copyright: 2012-2017 Francesco Ceruti <ceppofrancy@gmail.com>
@@ -31,6 +31,7 @@ License: GPL-3
 
 Files: debian/*
 Copyright: 2017 Josue Ortega <josue@debian.org>
+           2024 s0600204 <dev@s0600204>
 License: GPL-3.0+
 
 License: GPL-3.0+
