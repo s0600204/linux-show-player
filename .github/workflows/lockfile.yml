@@ -112,7 +112,7 @@ jobs:
         pip3 list | grep poetry
 
     - name: Checkout source
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
 
@@ -141,7 +141,7 @@ jobs:
     # Each of the jobs *should* generate the same (platform-agnostic) lockfile.
     # However they might not, so upload all of them for comparison.
     - name: Upload lockfile
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.sys.os }}__${{ matrix.poetVers }}__poetry.lock
         path: poetry.lock
