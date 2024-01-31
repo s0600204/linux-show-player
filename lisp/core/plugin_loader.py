@@ -77,7 +77,7 @@ class PluginsLoader:
         self,
         plugins: Iterable[str],
         optionals: bool = False,
-        log_level: int = logging.WARNING,
+        log_level: int = logging.DEBUG,
         required_by: Optional[Type[Plugin]] = None,
     ):
         for plugin_name in plugins:
