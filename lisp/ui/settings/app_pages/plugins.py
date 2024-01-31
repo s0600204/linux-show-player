@@ -149,15 +149,13 @@ class PluginModel(QAbstractTableModel):
                         self.index(row, column),
                         [Qt.DisplayRole, Qt.EditRole],
                     )
-
                     return True
 
         return False
 
     def flags(self, index):
-        column = index.column()
         flags = Qt.ItemIsEnabled | Qt.ItemIsSelectable
-        if column == 1 and not self.plugins[column].CorePlugin:
+        if index.column() == 1 and not self.plugins[index.row()].CorePlugin:
             flags |= Qt.ItemIsEditable
 
         return flags
