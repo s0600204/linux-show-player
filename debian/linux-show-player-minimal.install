@@ -1,16 +1,21 @@
 usr/bin/*
 usr/lib/python3*/*-packages/*.dist-info/*
+
 lisp/backend usr/lib/python3/dist-packages/lisp
 lisp/command usr/lib/python3/dist-packages/lisp
 lisp/core usr/lib/python3/dist-packages/lisp
 lisp/cues usr/lib/python3/dist-packages/lisp
 lisp/i18n usr/lib/python3/dist-packages/lisp
 lisp/layout usr/lib/python3/dist-packages/lisp
-lisp/ui/icons/__init__.py usr/lib/python3/dist-packages/lisp/ui/icons
-lisp/ui/icons/lisp usr/share/linux-show-player/icons
-lisp/ui/icons/Numix usr/share/linux-show-player/icons
-lisp/ui/settings usr/lib/python3/dist-packages/lisp/ui
-lisp/ui/themes usr/lib/python3/dist-packages/lisp/ui
-lisp/ui/widgets usr/lib/python3/dist-packages/lisp/ui
+lisp/ui usr/lib/python3/dist-packages/lisp
+
+lisp/plugins/default.json usr/lib/python3/dist-packages/lisp/plugins
+lisp/plugins/__init__.py usr/lib/python3/dist-packages/lisp/plugins
+
+lisp/__init__.py usr/lib/python3/dist-packages/lisp
+lisp/application.py usr/lib/python3/dist-packages/lisp
+lisp/default.json usr/lib/python3/dist-packages/lisp
+lisp/main.py usr/lib/python3/dist-packages/lisp
+
 dist/linuxshowplayer.desktop usr/share/applications
 dist/linuxshowplayer.png usr/share/pixmaps
