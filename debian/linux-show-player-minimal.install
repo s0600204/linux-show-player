@@ -12,10 +12,8 @@ lisp/ui usr/lib/python3/dist-packages/lisp
 lisp/plugins/default.json usr/lib/python3/dist-packages/lisp/plugins
 lisp/plugins/__init__.py usr/lib/python3/dist-packages/lisp/plugins
 
-lisp/__init__.py usr/lib/python3/dist-packages/lisp
-lisp/application.py usr/lib/python3/dist-packages/lisp
+lisp/*.py usr/lib/python3/dist-packages/lisp
 lisp/default.json usr/lib/python3/dist-packages/lisp
-lisp/main.py usr/lib/python3/dist-packages/lisp
 
 dist/linuxshowplayer.desktop usr/share/applications
 dist/linuxshowplayer.png usr/share/pixmaps

@@ -98,14 +98,23 @@ Description: Allows to control cues via external commands with multiple protocol
 Package: linux-show-player-gst-backend
 Architecture: all
 Depends:
- ${misc:Depends}
+ ${misc:Depends},
+ gstreamer1.0-plugins-good,
  python3-gi,
  python3-gst-1.0,
  python3-pyalsa
-Suggests:
+Recommends:
+ gstreamer1.0-alsa,
  python3-jack-client
+Suggests:
+ gstreamer1.0-libav,
+ gstreamer1.0-plugins-bad,
+ gstreamer1.0-plugins-ugly
 Description: Provide audio playback capabilities via the GStreamer framework.
  (You will need this to play media files!)
+ .
+ You will also either `gstreamer1.0-alsa` to output audio through an ALSA device,
+ or `python3-jack-client` to output audio via JACK.
 
 Package: linux-show-player-list-layout
 Architecture: all
@@ -117,8 +126,8 @@ Description: Provides a layout that organizes the cues in a list.
 Package: linux-show-player-media-info
 Architecture: all
 Depends:
- ${misc:Depends}
- linux-show-player-gst
+ ${misc:Depends},
+ linux-show-player-gst-backend
 Description: Provide a function to show information of media-cues.
 
 Package: linux-show-player-midi
