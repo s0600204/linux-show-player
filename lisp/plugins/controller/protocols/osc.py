@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 # Copyright 2016 Thomas Achtner <info@offtools.de>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
@@ -41,8 +41,6 @@ from lisp.plugins import get_plugin
 from lisp.core.plugin import PluginNotLoadedError
 from lisp.plugins.controller.common import LayoutAction, tr_layout_action
 from lisp.plugins.controller.protocol import Protocol
-from lisp.plugins.osc.osc_delegate import OscArgumentDelegate
-from lisp.plugins.osc.osc_server import OscMessageType
 from lisp.ui.qdelegates import (
     ComboBoxDelegate,
     CueActionDelegate,
@@ -52,6 +50,12 @@ from lisp.ui.qdelegates import (
 from lisp.ui.qmodels import SimpleTableModel
 from lisp.ui.settings.pages import SettingsPage, CuePageMixin
 from lisp.ui.ui_utils import translate
+
+try:
+    from lisp.plugins.osc.osc_delegate import OscArgumentDelegate
+    from lisp.plugins.osc.osc_server import OscMessageType
+except ImportError:
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -241,6 +245,17 @@ class OscSettings(SettingsPage):
 
         self.oscModel = OscModel()
 
+        try:
+            self.__osc = get_plugin("Osc")
+            self.setEnabled(self.__osc.is_loaded())
+        except PluginNotLoadedError:
+            self.setEnabled(False)
+            self.oscNotInstalledMessage = QLabel()
+            self.oscNotInstalledMessage.setAlignment(Qt.AlignCenter)
+            self.oscGroup.layout().addWidget(self.oscNotInstalledMessage)
+            self.retranslateUi()
+            return
+
         self.OscView = OscView(actionDelegate, parent=self.oscGroup)
         self.OscView.setModel(self.oscModel)
         self.oscGroup.layout().addWidget(self.OscView, 0, 0, 1, 2)
@@ -284,12 +299,13 @@ class OscSettings(SettingsPage):
         self.retranslateUi()
 
         self._defaultAction = None
-        try:
-            self.__osc = get_plugin("Osc")
-        except PluginNotLoadedError:
-            self.setEnabled(False)
 
     def retranslateUi(self):
+        if hasattr(self, "oscNotInstalledMessage"):
+            self.oscNotInstalledMessage.setText(
+                translate("ControllerSettings", "OSC plugin not installed"))
+            return
+
         self.addButton.setText(translate("ControllerOscSettings", "Add"))
         self.removeButton.setText(translate("ControllerOscSettings", "Remove"))
         self.oscCapture.setText(translate("ControllerOscSettings", "Capture"))
@@ -463,8 +479,12 @@ class Osc(Protocol):
     def __init__(self):
         super().__init__()
 
-        osc = get_plugin("Osc")
-        osc.server.new_message.connect(self.__new_message)
+        try:
+            osc = get_plugin("Osc")
+            if osc.is_loaded():
+                osc.server.new_message.connect(self.__new_message)
+        except PluginNotLoadedError:
+            pass
 
     def __new_message(self, path, args, types, *_, **__):
         key = self.key_from_message(path, types, args)
