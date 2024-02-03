@@ -1,19 +1,23 @@
-linux-show-player (0.7.0~dev-3) UNRELEASED; urgency=medium
+linux-show-player (0.6.0~s0600204-3) UNRELEASED; urgency=medium
+
+  * Improve support of MIDI/OSC plugins not being installed
+  * Correct identification of a "Core Plugin" in settings page
 
   * debian/control: Add missing dependencies of gst-backend
   * debian/control: Correct dependency name of media-info
   * debian/*-minimal.links: Add link to icons
+  * debian/changelog: whitespace cleaning
 
- -- s0600204 <dev@s0600204>  Wed, 31 Jan 2024 19:25:00 +0000
+ -- s0600204 <dev@s0600204>  Sat, 03 Feb 2024 18:50:00 +0000
 
-linux-show-player (0.7.0~dev-2) UNRELEASED; urgency=medium
+linux-show-player (0.6.0~s0600204-2) UNRELEASED; urgency=medium
 
   * debian/control: Re-jig defined dependencies.
   * debian/*-minimal: Add missing files.
 
  -- s0600204 <dev@s0600204>  Wed, 31 Jan 2024 16:55:00 +0000
 
-linux-show-player (0.7.0~dev-1) UNRELEASED; urgency=medium
+linux-show-player (0.6.0~s0600204-1) UNRELEASED; urgency=medium
 
   * Update to latest own development point
 
