@@ -82,6 +82,7 @@ class MidiSettings(SettingsPage):
 
         try:
             self.__midi = get_plugin("Midi")
+            self.setEnabled(self.__midi.is_loaded())
         except PluginNotLoadedError:
             self.setEnabled(False)
             self.midiNotInstalledMessage = QLabel()
