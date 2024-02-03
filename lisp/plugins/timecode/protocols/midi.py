@@ -18,6 +18,7 @@
 
 from mido import Message
 
+from lisp.core.plugin import PluginNotLoadedError
 from lisp.core.util import time_tuple
 from lisp.plugins import get_plugin
 from lisp.plugins.timecode.cue_tracker import TcFormat
@@ -45,7 +46,12 @@ class Midi(TimecodeProtocol):
         super().__init__()
         self.__last_time = -1
         self.__last_frame = -1
-        self.__midi = get_plugin("Midi")
+        try:
+            self.__midi = get_plugin("Midi")
+            if not self.__midi.is_loaded():
+                self.__midi = None
+        except PluginNotLoadedError:
+            self.__midi = None
 
     def __send_full(self, fmt, hours, minutes, seconds, frame):
         """Sends fullframe timecode message.
