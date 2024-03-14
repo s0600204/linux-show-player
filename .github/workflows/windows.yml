@@ -18,7 +18,7 @@ jobs:
 
   build-msys:
     name: Windows Build (msys2)
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     defaults:
       run:
@@ -28,14 +28,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - { sys: mingw64, cc: gcc   }
-        - { sys: mingw64, cc: clang }
-        - { sys: mingw32, cc: gcc   }
-        - { sys: mingw32, cc: clang }
-        - { sys: ucrt64,  cc: gcc   }
-        - { sys: ucrt64,  cc: clang }
-        - { sys: clang64, cc: clang }
-        - { sys: clang32, cc: clang }
+        - { sys: mingw64,    cc: gcc   }
+        - { sys: mingw64,    cc: clang }
+        - { sys: ucrt64,     cc: gcc   }
+        - { sys: ucrt64,     cc: clang }
+        - { sys: clang64,    cc: clang }
+        - { sys: clangarm64, cc: clang }
+        # Unusable, packages missing:
+        #~ - { sys: clang32, cc: clang } # Lacks gst-plugins-good, python-pyqt5, rtmidi
+        #~ - { sys: mingw32, cc: gcc   } # Lacks gst-plugins-good
+        #~ - { sys: mingw32, cc: clang } # Lacks gst-plugins-good
 
     steps:
 
