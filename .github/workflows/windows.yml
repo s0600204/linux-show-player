@@ -64,7 +64,7 @@ jobs:
           rtmidi:p
 
     - name: Checkout source
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
 
@@ -96,7 +96,7 @@ jobs:
     # environments, so only save one.
     - name: Upload wheel
       if: ${{ matrix.sys == 'mingw64' && matrix.cc == 'gcc' }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.wheel.outputs.filename }}
         path: ${{ steps.wheel.outputs.filename }}
