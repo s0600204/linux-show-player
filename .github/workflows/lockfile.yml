@@ -30,11 +30,6 @@ jobs:
       run:
         shell: ${{ matrix.sys.shell }}
 
-    # Building on an Ubuntu image is disabled until such time as it is proveably possible to
-    # build python-rtmidi v1.5.x (with or without Poetry).
-    #
-    # @note At the time of writing, python-rtmidi 1.5.x hasn't arrived in Ubuntu's (or Debian's)
-    #       repositories.
     strategy:
       fail-fast: false
       matrix:
@@ -42,9 +37,9 @@ jobs:
         - os: windows-latest
           shell: msys2 {0}
           distutils: stdlib
-        #- os: ubuntu-latest
-        #  shell: bash
-        #  distutils: local
+        - os: ubuntu-latest
+          shell: bash
+          distutils: local
         - os: macos-latest
           shell: bash
           distutils: local
@@ -89,6 +84,13 @@ jobs:
           python-pyqt5:p
           qt5-svg:p
           rtmidi:p
+
+    # Either libasound2-dev or libjack-dev (or both) is required to build the python-rtmidi
+    # 1.5.x source on Ubuntu systems.
+    - name: Install dependency for python-rtmidi
+      if: ${{ startsWith(matrix.sys.os, 'ubuntu') }}
+      run: |
+        sudo apt-get install libasound2-dev
 
     - name: Update pip
       run: |
