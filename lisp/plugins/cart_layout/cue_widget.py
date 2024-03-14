@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ from lisp.cues.cue_time import CueTime
 from lisp.cues.media_cue import MediaCue
 from lisp.plugins.cart_layout.page_widget import CartPageWidget
 from lisp.ui.icons import IconTheme
-from lisp.ui.widgets import QClickLabel, QClickSlider, DBMeter
+from lisp.ui.widgets import QClickLabel, QClickSlider, DigitalMeter
 
 
 class CueWidget(QWidget):
@@ -103,7 +103,7 @@ class CueWidget(QWidget):
         )
         self.volumeSlider.setVisible(False)
 
-        self.dbMeter = DBMeter(self)
+        self.dbMeter = DigitalMeter(self)
         self.dbMeter.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         self.dbMeter.setVisible(False)
 
@@ -262,6 +262,7 @@ class CueWidget(QWidget):
         self._cue.stopped.connect(self._statusStopped, Connection.QtQueued)
         self._cue.paused.connect(self._statusPaused, Connection.QtQueued)
         self._cue.error.connect(self._statusError, Connection.QtQueued)
+        self._cue.error_clear.connect(self._statusStopped, Connection.QtQueued)
         self._cue.end.connect(self._statusStopped, Connection.QtQueued)
 
         # Media cues features dBMeter and seekSlider

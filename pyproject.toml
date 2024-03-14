@@ -28,16 +28,25 @@ cython = "^0.29"
 falcon = "^3.0"
 jack-client = "^0.5"
 mido = "^1.2"
-pygobject = "^3.30"
-pyqt5 = "^5.15.2"
-pyqt5-qt5 = "5.15.2"
-python-rtmidi = "^1.1"
+pygobject = [
+    { markers = "sys_platform != 'win32'", version = "^3.30" }
+]
+pyqt5 = [
+    { markers = "sys_platform != 'win32'", version = "^5.15.2" }
+]
+python-rtmidi = [
+    { markers = "sys_platform != 'win32'", version = "^1.1" },
+    { markers = "sys_platform == 'win32'", git = "https://github.com/s0600204/python-rtmidi.git", branch = "msys2" }
+]
 requests = "^2.20"
 sortedcontainers = "^2.0"
 humanize = "^4.8.0"
-pyalsa = { git = "https://github.com/alsa-project/alsa-python.git", tag = "v1.2.7" }
-# Use a pyliblo fork that define dependecies correctly
-pyliblo3 = { git = "https://github.com/FrancescoCeruti/pyliblo3", rev = "0d943a4695d797827584be4ac8f4cb2137172a96" }
+pyalsa = { markers = "sys_platform == 'linux'", git = "https://github.com/alsa-project/alsa-python.git", tag = "v1.2.7" }
+# Use a pyliblo fork that define dependencies correctly
+pyliblo = { git = "https://github.com/s0600204/pyliblo.git", branch = "pip" }
+ola = [
+    { markers = "sys_platform == 'win32'", version = "^0.10.7" }
+]
 
 [tool.poetry.group.docs]
 optional = true

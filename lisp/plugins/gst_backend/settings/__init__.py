@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2016 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2021 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 from os.path import dirname
 
 from lisp.core.loading import load_classes
+from lisp.plugins.gst_backend.gst_utils import GstElementExcludes
 
 # Use a set() for avoiding duplication
 __PAGES = set()
@@ -25,7 +26,7 @@ __PAGES = set()
 
 def load():
     for _, page in load_classes(
-        __package__, dirname(__file__), suf=("Settings",)
+        __package__, dirname(__file__), suf=("Settings",), exclude=GstElementExcludes.get()
     ):
         __PAGES.add(page)
 

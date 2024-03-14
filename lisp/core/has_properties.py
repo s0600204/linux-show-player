@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2022 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -100,6 +100,10 @@ class HasProperties(metaclass=HasPropertiesMeta):
 
         self.property_changed = Signal()
         # Emitted after property change (self, name, value)
+
+        self.properties_changed = Signal()
+        # Emitted when properties have changed. Useful for those cases where
+        # it isn't necessary to know what's changed, only that something has.
 
     def properties_names(self, filter=None):
         """
@@ -204,6 +208,7 @@ class HasProperties(metaclass=HasPropertiesMeta):
                     current.update_properties(value)
                 else:
                     setattr(self, name, value)
+        self.properties_changed.emit(self)
 
     def changed(self, name):
         """

@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Linux Show Player.  If not, see <http://www.gnu.org/licenses/>.
 import os
+from pathlib import Path
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
@@ -132,5 +133,6 @@ class UriInputSettings(SettingsPage):
             translate("UriInputSettings", "All files") + " (*)",
         )
 
-        if os.path.exists(path):
-            self.filePath.setText("file://" + path)
+        path = Path(path)
+        if path.exists():
+            self.filePath.setText(path.resolve().as_uri())

@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2021 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,14 +15,36 @@
 # You should have received a copy of the GNU General Public License
 # along with Linux Show Player.  If not, see <http://www.gnu.org/licenses/>.
 
-from os.path import dirname
+from abc import abstractmethod, ABC
 
-from lisp.core.loading import load_classes
-from lisp.plugins.gst_backend.gst_utils import GstElementExcludes
+from lisp.backend.audio_utils import iec_scale
 
 
-def load():
-    for name, page in load_classes(
-        __package__, dirname(__file__), suf=("Config",), exclude=GstElementExcludes.get()
-    ):
-        yield name, page
+class Scale(ABC):
+    min: int
+    max: int
+
+    @abstractmethod
+    def scale(self, value):
+        pass
+
+
+class IECScale(Scale):
+    min: int = -70
+    max: int = 0
+
+    def scale(self, value):
+        return iec_scale(value)
+
+
+class LinearScale(Scale):
+    min: int = -60
+    max: int = 0
+
+    def scale(self, value):
+        if value < self.min:
+            return 0
+        elif value < self.max:
+            return (value - self.min) / (self.max - self.min)
+
+        return 1

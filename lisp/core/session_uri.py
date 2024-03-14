@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2020 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 from functools import lru_cache
 from urllib.parse import urlsplit, urlunsplit, quote, unquote
+import sys
 
 
 class SessionURI:
@@ -32,23 +33,29 @@ class SessionURI:
             rel_path = split.netloc + split.path
             # We need the absolute path
             path = self.path_to_absolute(rel_path)
-            # For local schemes, we assume the URI path is unquoted.
-            self._uri = urlunsplit(("file", "", quote(path), "", ""))
+            self._uri = urlunsplit(("file", "", path, "", ""))
         else:
             self._uri = uri
 
     @property
     def relative_path(self):
         """The path relative to the session file. Make sense for local files."""
-        path = unquote(urlsplit(self._uri).path)
-        return self.path_to_relative(path)
+        return self.path_to_relative(self.absolute_path)
 
     @property
     @lru_cache(maxsize=256)
     def absolute_path(self):
         """Unquoted "path" component of the URI."""
+
+        # On Windows systems, `urlsplit().path` is a string starting with
+        # a `/` character, which causes problems. For instance it prevents
+        # pathlib from treating as a path that exists.
+        path = urlsplit(self._uri).path
+        if sys.platform.startswith('win32') and self._is_local:
+            path = path[1:]
+
         # We can cache this, the absolute path doesn't change
-        return unquote(urlsplit(self._uri).path)
+        return unquote(path)
 
     @property
     def uri(self):

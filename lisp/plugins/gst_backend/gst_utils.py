@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2016 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2021 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Linux Show Player.  If not, see <http://www.gnu.org/licenses/>
+
+from enum import Enum
+import sys
 
 from lisp.backend.audio_utils import audio_file_duration
 from lisp.core.session_uri import SessionURI
@@ -75,3 +78,20 @@ def gtype(g_object: GObject.GObject) -> GObject.GType:
 
 class GstError(Exception):
     """Used to wrap GStreamer debug messages for the logging system."""
+
+class GstElementExcludes(Enum):
+    """Enum providing lists of Gst elements that are known to not be
+    supported on certain platforms.
+
+    Enum key values should be the valid values of `sys.platform`, and
+    should only be supplied if a particular platform has exceptions.
+    (Having a blank tuple as an enum value causes problems.)
+    """
+    win32 = ("alsa_sink", "jack_sink", "pulse_sink",)
+
+    @classmethod
+    def get(cls):
+        try:
+            return cls[sys.platform].value
+        except KeyError:
+            return ()

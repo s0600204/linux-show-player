@@ -32,7 +32,7 @@ from lisp.application import Application
 from lisp.core.configuration import JSONFileConfiguration
 from lisp.ui import themes
 from lisp.ui.icons import IconTheme
-from lisp.ui.ui_utils import install_translation, PyQtUnixSignalHandler
+from lisp.ui.ui_utils import install_translation#, PyQtUnixSignalHandler
 
 
 def main():
@@ -162,15 +162,15 @@ def main():
     signal.signal(signal.SIGTERM, handle_quit_signal)
     signal.signal(signal.SIGINT, handle_quit_signal)
 
-    with PyQtUnixSignalHandler():
-        # Defer application start when QT main-loop starts
-        QTimer.singleShot(0, partial(lisp_app.start, session_file=args.file))
-        # Start QT main-loop, blocks until exit
-        exit_code = qt_app.exec()
+    #with PyQtUnixSignalHandler():
+    # Defer application start when QT main-loop starts
+    QTimer.singleShot(0, partial(lisp_app.start, session_file=args.file))
+    # Start QT main-loop, blocks until exit
+    exit_code = qt_app.exec()
 
-        # Finalize all and exit
-        plugins.finalize_plugins()
-        lisp_app.finalize()
+    # Finalize all and exit
+    plugins.finalize_plugins()
+    lisp_app.finalize()
 
     sys.exit(exit_code)
 
