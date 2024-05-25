@@ -63,9 +63,8 @@ jobs:
 
         exclude:
           # Poetry bug #8338 (ImportError: atomic_open from requests.utils)
-          - os: ubuntu-latest
-            shell: bash
-            distutils: local
+          - sys:
+              os: ubuntu-latest
             poetVers: 1.6.0
 
     steps:
