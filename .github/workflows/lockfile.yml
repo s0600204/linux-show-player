@@ -100,6 +100,16 @@ jobs:
       run: |
         sudo apt-get install libasound2-dev
 
+    # On macOS systems, pip is maintained "externally" via homebrew, and so refuses to update
+    # itself or install anything directly. As this is a CI system, we can safely override this.
+    #
+    # We do *NOT* set the default install location to "user", as that location is not in PATH,
+    # and thus poetry is unfindable when we attempt to use it directly later.
+    - name: Configure pip
+      if: ${{ startsWith(matrix.sys.os, 'macos') }}
+      run: |
+        python3 -m pip config --user set global.break-system-packages true
+
     - name: Update pip
       run: |
         python3 -m pip install -U pip
