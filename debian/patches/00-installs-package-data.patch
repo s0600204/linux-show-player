@@ -1,14 +1,16 @@
 Description: Installs icons under /usr/share/linux-show-player directory
 Author: s0600204 <dev@s0600204>
-Last-Update: 2023-04-20
+Last-Update: 2024-10-04
 Forwarded: not-needed
 
 --- a/lisp/__init__.py
 +++ b/lisp/__init__.py
-@@ -44,5 +44,5 @@
+@@ -45,7 +45,7 @@ USER_PLUGINS_PATH = path.join(app_dirs.user_data_dir, "plugins")
  
  DEFAULT_CACHE_DIR = path.join(app_dirs.user_data_dir, "cache")
  
 -ICON_THEMES_DIR = path.join(APP_DIR, "ui", "icons")
 +ICON_THEMES_DIR = path.join("/usr/share/linux-show-player", "ui", "icons")
  ICON_THEME_COMMON = "lisp"
+ 
+ RUNNING_IN_FLATPAK = "FLATPAK_ID" in os.environ

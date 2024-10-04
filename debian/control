@@ -82,6 +82,7 @@ Package: linux-show-player-cart-layout
 Architecture: all
 Depends:
  ${misc:Depends},
+ python3-qdigitalmeter,
  python3-sortedcontainers
 Provides: linux-show-player-layout
 Description: Provides a layout that organizes cues in grid-like pages.
@@ -119,7 +120,8 @@ Description: Provide audio playback capabilities via the GStreamer framework.
 Package: linux-show-player-list-layout
 Architecture: all
 Depends:
- ${misc:Depends}
+ ${misc:Depends},
+ python3-qdigitalmeter
 Provides: linux-show-player-layout
 Description: Provides a layout that organizes the cues in a list.
 

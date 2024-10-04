@@ -1,3 +1,18 @@
+linux-show-player (0.6.4~s0600204-1) UNRELEASED; urgency=medium
+
+  * Use qdigitalmeter widget, now an external dependency
+
+  [ Francesco Ceruti ]
+  * Require pyalsa 1.2.12 to address python 3.12 compatibility issues
+  * Correctly handle filenames containing URL special characters like `#` and `?`
+  * Prevent application crash when attempting to remove a cue from an empty CollectionCue
+  * Fix Command Cue non running commands on the host system
+
+  [ s0600204 ]
+  * Correctly save index visibility
+
+ -- s0600204 <dev@s0600204>  Fri, 04 Oct 2024 15:16:00 +0100
+
 linux-show-player (0.6.0~s0600204-4) UNRELEASED; urgency=medium
 
   [ Francesco Ceruti ]
