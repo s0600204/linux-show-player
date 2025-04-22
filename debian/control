@@ -103,6 +103,7 @@ Depends:
  gstreamer1.0-plugins-good,
  python3-gi,
  python3-gst-1.0,
+ python3-numpy,
  python3-pyalsa
 Recommends:
  gstreamer1.0-alsa,

@@ -1,3 +1,24 @@
+linux-show-player (0.6.5~s0600204-1) UNRELEASED; urgency=medium
+
+  [ Francesco Ceruti ]
+  * Remove deprecated modules, incl. using numpy to replace audioop
+  * Timecode messages are now sent (329)
+  * Prevent crash when cart pages are removed
+  * Add Interrupt action to all non-media cues
+  * Fix Pre-/Post-Wait states
+
+  [ Sean Boyer ]
+  * Prevent application crash on Save Session (336)
+
+  [ Bryan Enneking ]
+  * Add Pause & Resume actions to all non-media cues (340, 343)
+  * Improve time formatting in Cue Settings (345, 346, 347)
+
+  [ s0600204 ]
+  * Navigate prev/next pages using MIDI or OSC (339)
+
+ -- s0600204 <dev@s0600204>  Tue, 22 Apr 2025 19:50:00 +0100
+
 linux-show-player (0.6.4~s0600204-1) UNRELEASED; urgency=medium
 
   * Use qdigitalmeter widget, now an external dependency
