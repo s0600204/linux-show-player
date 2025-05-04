@@ -153,7 +153,7 @@ Package: linux-show-player-osc
 Architecture: all
 Depends:
  ${misc:Depends},
- python3-liblo
+ python3-osc
 Description: Provide OSC I/O functionality.
 
 Package: linux-show-player-presets
