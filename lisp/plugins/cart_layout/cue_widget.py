@@ -318,7 +318,7 @@ class CueWidget(QWidget):
 
     def _updateStyle(self, stylesheet):
         self.nameButton.setStyleSheet(stylesheet)
-        self.nameButton.setIcon(IconTheme.get(f"{self._cue.icon}-cart"))
+        self.nameButton.setIcon(IconTheme.get(self._cue.icon, QColor(0, 0, 0, 50)))
 
     def _enterFadein(self):
         p = self.timeDisplay.palette()

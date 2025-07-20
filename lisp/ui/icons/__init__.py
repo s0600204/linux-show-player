@@ -19,9 +19,10 @@ import glob
 import os
 from typing import Union
 
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QColor, QIcon
 
 from lisp import ICON_THEMES_DIR, ICON_THEME_COMMON
+from lisp.ui.icons.recolored_icon_engine import RecoloredIconEngine
 
 
 def icon_themes_names():
@@ -47,18 +48,25 @@ class IconTheme:
         yield from self._lookup_dirs
 
     @staticmethod
-    def get(icon_name) -> Union[QIcon, None]:
-        icon = IconTheme._GlobalCache.get(icon_name, None)
+    def get(icon_name, color=None) -> Union[QIcon, None]:
+        if color:
+            cache_name = f"{icon_name}:{color.name(QColor.HexArgb)}"
+        else:
+            cache_name = icon_name
+        icon = IconTheme._GlobalCache.get(cache_name, None)
 
         if icon is None:
             icon = IconTheme._BLANK_ICON
             for dir_ in IconTheme._GlobalTheme:
                 pattern = IconTheme._SEARCH_PATTERN.format(dir_, icon_name)
                 for icon in glob.iglob(pattern, recursive=True):
-                    icon = QIcon(icon)
+                    if color:
+                        icon = QIcon(RecoloredIconEngine(icon, color))
+                    else:
+                        icon = QIcon(icon)
                     break
 
-            IconTheme._GlobalCache[icon_name] = icon
+            IconTheme._GlobalCache[cache_name] = icon
 
         return icon
 

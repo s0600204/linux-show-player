@@ -96,11 +96,11 @@ class CueStatusIcons(QWidget):
 
     def updateIcon(self):
         if self._item.cue.state & CueState.Running:
-            self._icon = IconTheme.get(f"{self._item.cue.icon}-running")
+            self._icon = IconTheme.get(self._item.cue.icon, QColor(0, 221, 0, 255))
         elif self._item.cue.state & CueState.Pause:
-            self._icon = IconTheme.get(f"{self._item.cue.icon}-pause")
+            self._icon = IconTheme.get(self._item.cue.icon, QColor(255, 153, 0, 255))
         elif self._item.cue.state & CueState.Error:
-            self._icon = IconTheme.get(f"{self._item.cue.icon}-error")
+            self._icon = IconTheme.get(self._item.cue.icon, QColor(221, 17, 17, 255))
         else:
             self._icon = IconTheme.get(self._item.cue.icon)
 
