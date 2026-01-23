@@ -53,10 +53,11 @@ class PluginsManager:
         # Plugins installed by the user
         if self._enable_user_plugins and path.exists(USER_PLUGINS_PATH):
             # Allow importing of python modules from the user plugins path.
-            if USER_PLUGINS_PATH not in sys.path:
-                sys.path.insert(1, USER_PLUGINS_PATH)
+            user_plugins_path = path.dirname(USER_PLUGINS_PATH)
+            if user_plugins_path not in sys.path:
+                sys.path.insert(1, user_plugins_path)
 
-            user_plugins = load_classes("", USER_PLUGINS_PATH)
+            user_plugins = load_classes("plugins", USER_PLUGINS_PATH)
         else:
             user_plugins = ()
 
