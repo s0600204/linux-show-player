@@ -1,3 +1,10 @@
+linux-show-player (0.6.5~s0600204-3) UNRELEASED; urgency=medium
+
+  [s0600204]
+  * Migrate from appdirs to platformdirs
+
+ -- s0600204 <dev@s0600204>  Sun, 25 Jan 2026 16:55:00 +0000
+
 linux-show-player (0.6.5~s0600204-2) UNRELEASED; urgency=medium
 
   [s0600204]

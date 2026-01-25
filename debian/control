@@ -61,7 +61,7 @@ Depends:
  ${misc:Depends},
  linux-show-player-layout,
  python3:any,
- python3-appdirs,
+ python3-platformdirs,
  python3-pyqt5
 Description: Minimal installation of Linux Show Player.
 
