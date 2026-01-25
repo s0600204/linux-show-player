@@ -1,19 +1,19 @@
 usr/bin/*
 usr/lib/python3*/*-packages/*.dist-info/*
 
-lisp/backend usr/lib/python3/dist-packages/lisp
-lisp/command usr/lib/python3/dist-packages/lisp
-lisp/core usr/lib/python3/dist-packages/lisp
-lisp/cues usr/lib/python3/dist-packages/lisp
-lisp/i18n usr/lib/python3/dist-packages/lisp
-lisp/layout usr/lib/python3/dist-packages/lisp
-lisp/ui usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/backend usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/command usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/core usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/cues usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/i18n usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/layout usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/ui usr/lib/python3/dist-packages/lisp
 
-lisp/plugins/default.json usr/lib/python3/dist-packages/lisp/plugins
-lisp/plugins/__init__.py usr/lib/python3/dist-packages/lisp/plugins
+usr/lib/python3.13/dist-packages/lisp/plugins/default.json usr/lib/python3/dist-packages/lisp/plugins
+usr/lib/python3.13/dist-packages/lisp/plugins/__init__.py usr/lib/python3/dist-packages/lisp/plugins
 
-lisp/*.py usr/lib/python3/dist-packages/lisp
-lisp/default.json usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/*.py usr/lib/python3/dist-packages/lisp
+usr/lib/python3.13/dist-packages/lisp/default.json usr/lib/python3/dist-packages/lisp
 
 dist/linuxshowplayer.desktop usr/share/applications
 dist/linuxshowplayer.png usr/share/pixmaps
