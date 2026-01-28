@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,9 +33,10 @@ from lisp.cues.cue_factory import CueFactory
 from lisp.cues.cue_model import CueModel
 from lisp.cues.media_cue import MediaCue
 from lisp.layout.cue_layout import CueLayout
-from lisp.plugins import get_plugins
+from lisp.plugins import get_plugin, get_plugins, showfile_plugins_check
 from lisp.ui.layoutselect import LayoutSelect
 from lisp.ui.mainwindow import MainWindow
+from lisp.ui.pluginunavailabilitydialog import PluginUnavailabilityDialog, PluginUnavailabilityDialogAction
 from lisp.ui.settings.app_configuration import AppConfigurationDialog
 from lisp.ui.settings.app_pages.cue import CueAppSettings
 from lisp.ui.settings.app_pages.general import AppGeneral
@@ -53,6 +54,7 @@ logger = logging.getLogger(__name__)
 class Application(metaclass=Singleton):
     def __init__(self, app_conf=DummyConfiguration()):
         self.session_created = Signal()
+        self.session_initialised = Signal()
         self.session_loaded = Signal()
         self.session_before_finalize = Signal()
 
@@ -126,14 +128,37 @@ class Application(metaclass=Singleton):
 
             if layout_name.lower() != "nodefault":
                 self.__new_session(layout.get_layout(layout_name))
+                self.session_initialised.emit(self.session)
             else:
                 self.__new_session_dialog()
+
+    def create_session(self, layout_name):
+        self.__new_session(layout.get_layout(layout_name))
 
     def finalize(self):
         self.__delete_session()
 
         self.__cue_model = None
         self.__main_window = None
+
+    def __show_plugin_unavailability(self, plugins_dict):
+
+        dialog = PluginUnavailabilityDialog(plugins_dict, parent=self.window)
+
+        # There are (currently) three responses:
+        # 1. Create new session
+        # 2. Open a different session
+        # 3. Cancel current open
+        result = dialog.exec()
+        if result == QDialog.Rejected:
+            if self.__session is None:
+                qApp.quit()
+        elif result == PluginUnavailabilityDialogAction.NewShowfile.value:
+            self.__new_session_dialog()
+        elif result == PluginUnavailabilityDialogAction.OpenDifferent.value:
+            path = self.window.getOpenSessionFile()
+            if path is not None:
+                self.__load_from_file(path)
 
     def __new_session_dialog(self):
         """Show the layout-selection dialog"""
@@ -146,6 +171,7 @@ class Application(metaclass=Singleton):
                     self.__load_from_file(dialog.sessionPath)
                 else:
                     self.__new_session(dialog.selected())
+                    self.session_initialised.emit(self.session)
             else:
                 if self.__session is None:
                     # If the user close the dialog, and no layout exists
@@ -178,17 +204,63 @@ class Application(metaclass=Singleton):
         session_props = self.session.properties()
         session_props.pop("session_file", None)
 
-        # Get session cues
+        # Determine plugins used in showfile
+        plugins_list = []
+
+        # Add plugin providing layout
+        layout_plugin = self.session.layout.__module__.split(".")
+        if layout_plugin[0] == "lisp":
+            plugins_list.append(layout_plugin[2])
+        else:
+            plugins_list.append(layout_plugin[0] or layout_plugin[1])
+
+        # Plugins that register cue-settings generic to all cue-types.
+        #
+        # (Cue-settings specific to certain cue-types are expected to be
+        #   included within the same plugin as that cue-type.)
+        #
+        # We assume that a module called (e.g.) 'alpha' stores its settings
+        #   under a cue property by the same name.
+        plugins_cue_settings_list = []
+        for registered in CueSettingsRegistry().filter():
+            module = registered.__module__.split('.')
+            if module[1] == 'plugins':
+                plugins_cue_settings_list.append(module[2])
+
+        # Get session cues (and the plugins used to create them)
         session_cues = []
         for cue in self.layout.cues():
             session_cues.append(cue.properties(filter=filter_live_properties))
 
+            plugin = cue.__module__.split('.')
+            if plugin[0] == "lisp":
+                plugin = plugin[2]
+            else:
+                plugin = plugin[1]
+            if plugin not in plugins_list:
+                plugins_list.append(plugin)
+
+            non_default_props = cue.properties(defaults=False, filter=filter_live_properties)
+            plugins_list.extend(
+                [p for p in plugins_cue_settings_list if p in non_default_props and p not in plugins_list])
+
+        # Save basic plugin info
+        plugins_dict = {}
+        installed = {v.__module__.split('.')[2]: k for k, v in get_plugins()}
+        for plugin_name in plugins_list:
+            plugin_name = installed[plugin_name]
+            plugin = get_plugin(plugin_name)
+            plugins_dict[plugin_name] = {
+                'name': plugin.Name,
+                'vers': plugin.Version,
+            }
+
+        session_dict = {"session": session_props, "cues": session_cues, "plugins": plugins_dict}
+
         session_dict = {
             "meta": {
                 "version": lisp_version,
-                "plugins": {
-                    name: plugin.Version for name, plugin in get_plugins()
-                },
+                "plugins": plugins_dict,
             },
             "session": session_props,
             "cues": session_cues,
@@ -231,12 +303,25 @@ class Application(metaclass=Singleton):
             with open(session_file, mode="r", encoding="utf-8") as file:
                 session_dict = json.load(file)
 
+            # Check necessary plugins are installed and loaded/enabled
+            if 'meta' in session_dict and 'plugins' in session_dict['meta']:
+                check_passed = showfile_plugins_check(session_dict['meta']['plugins'])
+                if not check_passed:
+                    self.__show_plugin_unavailability(session_dict['meta']['plugins'])
+                    return
+
             # New session
             self.__new_session(
                 layout.get_layout(session_dict["session"]["layout_type"])
             )
             self.session.update_properties(session_dict["session"])
             self.session.session_file = abspath(session_file)
+
+            if 'plugins' in session_dict['session']:
+                for plugin_name, plugin_config in session_dict['session']['plugins'].items():
+                    self.__session.set_plugin_session_config(plugin_name, plugin_config)
+
+            self.session_initialised.emit(self.session)
 
             # Load cues
             for cues_dict in session_dict.get("cues", {}):

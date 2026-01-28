@@ -2,14 +2,9 @@
     "name": "python-modules",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --no-index --no-build-isolation --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} appdirs falcon jack-client mido requests sortedcontainers humanize qdigitalmeter"
+        "pip3 install --no-index --no-build-isolation --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} falcon jack-client mido platformdirs requests sortedcontainers humanize qdigitalmeter"
     ],
     "sources": [
-        {
-            "type": "file",
-            "url": "https://files.pythonhosted.org/packages/3b/00/2344469e2084fb287c2e0b57b72910309874c3245463acd6cf5e3db69324/appdirs-1.4.4-py2.py3-none-any.whl",
-            "sha256": "a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"
-        },
         {
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/1d/82/95c5fff8c902eb7cb7e823a43987166b428cdbf94533c66078581f7461a1/JACK_Client-0.5.5-py3-none-any.whl",
@@ -19,6 +14,11 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/13/a3/a812df4e2dd5696d1f351d58b8fe16a405b234ad2886a0dab9183fb78109/pycparser-2.22-py3-none-any.whl",
             "sha256": "c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/cb/28/3bfe2fa5a7b9c46fe7e13c97bda14c895fb10fa2ebf1d0abb90e0cea7ee1/platformdirs-4.5.1-py3-none-any.whl",
+            "sha256": "d03afa3963c806a9bed9d5125c8f4cb2fdaf74a55ab60e5d59b3fde758104d31"
         },
         {
             "type": "file",

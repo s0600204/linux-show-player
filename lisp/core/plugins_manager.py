@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2022 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ class PluginsManager:
             mod_path = path.dirname(inspect.getfile(plugin))
             mod_name = plugin.__module__.split(".")[-1]
 
-            # Load plugin configuration
+            # Load plugin (app-level) configuration
             user_config_path = path.join(
                 app_dirs.user_config_dir, mod_name + ".json"
             )
@@ -127,14 +127,17 @@ class PluginsManager:
             yield name, plugin
 
     def get_plugin(self, plugin_name: str) -> Plugin:
-        if self.is_loaded(plugin_name):
+        if self.plugin_exists(plugin_name):
             return self._plugins[plugin_name]
         else:
             raise PluginNotLoadedError(
                 translate(
-                    "PluginsError", 'The requested plugin is not loaded: "{}"'
+                    "PluginsError", 'The requested plugin does not exist: "{}"'
                 ).format(plugin_name)
             )
+
+    def plugin_exists(self, plugin_name) -> bool:
+        return plugin_name in self._plugins
 
     def finalize_plugins(self):
         """Finalize all the plugins."""

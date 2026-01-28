@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Linux Show Player.  If not, see <http://www.gnu.org/licenses/>.
 
-import fcntl
+#import fcntl
 import logging
 import os
 import signal
@@ -161,7 +161,7 @@ def tr_sorted(context, iterable, key=None, reverse=False):
 
     return sorted(iterable, key=tr_key, reverse=reverse)
 
-
+'''
 class PyQtUnixSignalHandler:
     """
     Some magic horror to allow Python to execute signal handlers, this
@@ -214,3 +214,4 @@ class PyQtUnixSignalHandler:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.release()
+'''

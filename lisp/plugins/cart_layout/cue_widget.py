@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2018 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -263,6 +263,7 @@ class CueWidget(QWidget):
         self._cue.stopped.connect(self._statusStopped, Connection.QtQueued)
         self._cue.paused.connect(self._statusPaused, Connection.QtQueued)
         self._cue.error.connect(self._statusError, Connection.QtQueued)
+        self._cue.error_clear.connect(self._statusStopped, Connection.QtQueued)
         self._cue.end.connect(self._statusStopped, Connection.QtQueued)
 
         # Media cues features dBMeter and seekSlider

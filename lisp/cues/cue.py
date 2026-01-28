@@ -40,6 +40,8 @@ class CueState:
     PreWait_Pause = 64
     PostWait_Pause = 128
 
+    Interrupt = 256
+
     IsRunning = Running | PreWait | PostWait
     IsPaused = Pause | PreWait_Pause | PostWait_Pause
     IsStopped = Error | Stop
@@ -144,8 +146,8 @@ class Cue(HasProperties):
 
         self._st_lock = Lock()
         self._state = CueState.Stop
-        self._prewait = RWait()
-        self._postwait = RWait()
+        self._prewait = RWait(self)
+        self._postwait = RWait(self)
 
         # Pre-Wait signals
         self.prewait_start = self._prewait.start
@@ -171,6 +173,7 @@ class Cue(HasProperties):
         self.stopped = Signal()
         self.paused = Signal()
         self.error = Signal()
+        self.error_clear = Signal()
         self.next = Signal()
         self.end = Signal()
 
@@ -263,6 +266,10 @@ class Cue(HasProperties):
     @async_function
     def start(self, fade=False):
         """Start the cue."""
+
+        # If there's an Error, then we shouldn't wish to continue as that might make things worse.
+        if self._state & CueState.Error:
+            return
 
         # If possible acquire the state-lock, otherwise return
         if not self._st_lock.acquire(blocking=False):
@@ -479,6 +486,9 @@ class Cue(HasProperties):
         :type fade: bool
         """
         with self._st_lock:
+            self._state |= CueState.Interrupt
+            self.interrupted.emit(self)
+
             # Stop PreWait (if in PreWait(_Pause) nothing else is "running")
             if self._state & (CueState.PreWait | CueState.PreWait_Pause):
                 self._state = CueState.Stop
@@ -501,7 +511,9 @@ class Cue(HasProperties):
                         self._state ^ CueState.Pause
                     )
                     self._state |= CueState.Stop
-                    self.interrupted.emit(self)
+                    self.stopped.emit(self)
+
+            self._state ^= CueState.Interrupt
 
     def __interrupt__(self, fade=False):
         """Implement the cue `interrupt` behavior.
@@ -549,6 +561,11 @@ class Cue(HasProperties):
         if locked:
             self._st_lock.release()
 
+    def _clear_error(self):
+        """Explicitly reset the error state"""
+        self._state = CueState.Stop
+        self.error_clear.emit(self)
+
     def _error(self):
         """Remove Running/Pause/Stop state and add Error state."""
         locked = self._st_lock.acquire(blocking=False)
@@ -563,6 +580,11 @@ class Cue(HasProperties):
 
         if locked:
             self._st_lock.release()
+
+    def update_properties(self, properties):
+        if self._state & CueState.Error:
+            self._clear_error()
+        super().update_properties(properties)
 
     def current_time(self):
         """Return the current execution time if available, otherwise 0.
@@ -601,3 +623,7 @@ class Cue(HasProperties):
             or next_action == CueNextAction.SelectAfterEnd
         ):
             self.end.connect(self.next.emit)
+
+    @property
+    def type(self):
+        return self._type_

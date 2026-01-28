@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2020 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2024 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 # along with Linux Show Player.  If not, see <http://www.gnu.org/licenses/>.
 
 import os.path
+import pathlib
 
 from PyQt5.QtCore import Qt, QT_TRANSLATE_NOOP
 from PyQt5.QtGui import QCursor
@@ -162,7 +163,8 @@ class GstBackend(Plugin, BaseBackend):
 
         cues = []
         for file in files:
-            cue = factory(self.app, uri=file)
+            path = pathlib.Path(file).resolve()
+            cue = factory(self.app, uri=path.as_uri())
             # Use the filename without extension as cue name
             cue.name = os.path.splitext(os.path.basename(file))[0]
 

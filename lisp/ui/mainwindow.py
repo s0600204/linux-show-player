@@ -1,6 +1,6 @@
 # This file is part of Linux Show Player
 #
-# Copyright 2022 Francesco Ceruti <ceppofrancy@gmail.com>
+# Copyright 2023 Francesco Ceruti <ceppofrancy@gmail.com>
 #
 # Linux Show Player is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ from lisp.ui.logging.models import create_log_model
 from lisp.ui.logging.status import LogStatusIcon, LogMessageWidget
 from lisp.ui.logging.viewer import LogViewer
 from lisp.ui.settings.app_configuration import AppConfigurationDialog
+from lisp.ui.settings.session_configuration import SessionConfigurationDialog
 from lisp.ui.ui_utils import translate
 from lisp.ui.widgets import DigitalLabelClock
 
@@ -159,6 +160,12 @@ class MainWindow(QMainWindow, metaclass=QSingleton):
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.multiEdit)
 
+        # menuTools
+        self.sessionPreferences = QAction(self)
+        self.sessionPreferences.triggered.connect(self._show_session_preferences)
+        self.menuTools.addAction(self.sessionPreferences)
+        self.menuTools.addSeparator()
+
         # menuAbout
         self.actionAbout = QAction(self)
         self.actionAbout.triggered.connect(self.__about)
@@ -227,6 +234,7 @@ class MainWindow(QMainWindow, metaclass=QSingleton):
         # menuTools
         self.menuTools.setTitle(translate("MainWindow", "&Tools"))
         self.multiEdit.setText(translate("MainWindow", "Edit selection"))
+        self.sessionPreferences.setText(translate("MainWindow", "Session Preferences"))
         # menuAbout
         self.menuAbout.setTitle(translate("MainWindow", "&About"))
         self.actionAbout.setText(translate("MainWindow", "About"))
@@ -314,12 +322,19 @@ class MainWindow(QMainWindow, metaclass=QSingleton):
         else:
             self.showMaximized()
 
+    def check_session_saved(self):
+        return self.__checkSessionSaved()
+
     def closeEvent(self, event):
         if self.__checkSessionSaved():
             qApp.quit()
             event.accept()
         else:
             event.ignore()
+
+    def _show_session_preferences(self):
+        prefUi = SessionConfigurationDialog(parent=self)
+        prefUi.exec_()
 
     def __beforeSessionFinalize(self):
         self.centralWidget().layout().removeWidget(
