@@ -1,3 +1,10 @@
+linux-show-player (0.6.5~s0600204-4.1) UNRELEASED; urgency=medium
+
+  [gst_backend]
+  * Patch getting string from GstCaps' Structure{Wrapper}
+
+ -- s0600204 <dev@s0600204>  Mon, 16 Feb 2026 13:42:00 +0000
+
 linux-show-player (0.6.5~s0600204-4) UNRELEASED; urgency=medium
 
   [s0600204]

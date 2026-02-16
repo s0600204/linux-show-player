@@ -1,0 +1,29 @@
+Description: Fixes getting mimetype string from GstCaps in Gst 1.26.2
+Author: s0600204 <dev@s0600204>
+Last-Update: 2026-02-16
+Forwarded: not-needed
+
+--- a/lisp/plugins/gst_backend/gst_utils.py
++++ b/lisp/plugins/gst_backend/gst_utils.py
+@@ -43,7 +43,20 @@ def gst_mime_types():
+ 
+         if caps is not None:
+             for i in range(caps.get_size()):
+-                mime = caps.get_structure(i).to_string()
++                # Gst 1.26.2 breaks the API, where the following returns a `StructureWrapper`
++                # instance instead of a `GstStructure` instance.
++                # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9148#note_2966124
++                #
++                # This appears to have been fixed in 1.26.3.
++                # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bbf60305ed2ee35f4ecf7a5de2bb139203dda2af
++                # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9178
++                #
++                structure = caps.get_structure(i)
++                try:
++                    mime = structure.to_string()
++                except AttributeError:
++                    # Based on https://github.com/jojo141185/mopidy-docker/blob/bb62ff2077a61ab1b54799eac56ac5d769e2743b/Dockerfile#L231
++                    mime = str(structure).split(",")[0]
+                 extensions = gtf.get_extensions()
+                 yield mime, extensions
+ 

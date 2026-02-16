@@ -1,2 +1,3 @@
 # You must remove unused comment lines for the released package.
 00-installs-package-data.patch
+01-gst1.26.2-caps-structure-wrapper.patch
